@@ -8,18 +8,20 @@ CareBlocks is a demonstration on the applications of Blockchain technology in he
 
 ### List of contents:
 
-- Installation for developers
- 1. Prerequisites
- 2. Running the infrastructure
-- Development process
- 1. Running the Code
- 2. Adding new code/functionality
-  - Adding Code
-  - Adding libraries/imports
-  - Adding API Endpoints
-- Documentation
- 1. API (Swagger)
- 2. Functions' docs
+- [Installation for developers](https://github.com/blockchain-emr/back#installation-for-developers)
+   1. [Prerequisites](https://github.com/blockchain-emr/back#prerequisites)
+   2. [Running the infrastructure](https://github.com/blockchain-emr/back#running-the-infrastructure-)
+
+- [Development process](https://github.com/blockchain-emr/back#development-process)
+   1. [Running the Code](https://github.com/blockchain-emr/back#1---running-the-code)
+   2. [Adding new code/functionality](https://github.com/blockchain-emr/back#2--adding-new-codefunctionality)
+      - [Adding Code](https://github.com/blockchain-emr/back#adding-code)
+      - [Adding libraries/imports](https://github.com/blockchain-emr/back#adding-librariesimports)
+      - [Adding API Endpoints](https://github.com/blockchain-emr/back#adding-api-endpoints)
+
+- [Documentation](https://github.com/blockchain-emr/back#documentation)
+  1. [API (Swagger)]()
+  2. Functions' docs
 
 ********
 
@@ -100,6 +102,8 @@ _______________
 
 ### 2- Adding new code/functionality:
 
+**Before you do anything, please make sure you have the latest code by pulling the master branch.**
+
 #### Adding Code:
 The project code can be found at ```src/app``` and organized as the following :
 
@@ -123,15 +127,14 @@ You can create a file with the category your creating endpoints to, for example 
 
 Above the function your write, please use ``@swag_from("path")`` decorator to refer to the swagger yaml documentation.
 
-When done writing your endpoints, if you created a new file don't forget to add and import line in ``app.py``  to make it work like :
-```from api.account_details import *```.
+When done writing your endpoints, if you created a new file don't forget to add and import line in ``app.py``  to make it work like :  ```python from api.account_details import *``` .
 
 
 Happy Coding !! :grinning:
 
 ## Documentation
 
-**API (Swagger) :**
+### API (Swagger) :
 
 To access _API's docs (a fully functional swagger documentation)_, after running the api you can navigate to http://localhost:5000/apidocs with your browser.
 
@@ -142,7 +145,7 @@ The documentation for each endpoint can be found at ```src/app/docs/swagger/<cat
 
 
 
-**Functions' docs :**
+### Functions' docs :
 
 You can find inline docs in functions, it's basically consists of:
 
