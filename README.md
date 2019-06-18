@@ -20,8 +20,8 @@ CareBlocks is a demonstration on the applications of Blockchain technology in he
       - [Adding API Endpoints](https://github.com/blockchain-emr/back#adding-api-endpoints)
 
 - [Documentation](https://github.com/blockchain-emr/back#documentation)
-  1. [API (Swagger)]()
-  2. Functions' docs
+  1. [API (Swagger)](https://github.com/blockchain-emr/back#api-swagger-)
+  2. [Functions' docs](https://github.com/blockchain-emr/back#functions-docs-)
 
 ********
 
