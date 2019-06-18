@@ -3,8 +3,27 @@
 CareBlocks is a demonstration on the applications of Blockchain technology in healthcare.
 
 
-## Installation for developers
 
+
+
+### List of contents:
+
+- Installation for developers
+ 1. Prerequisites
+ 2. Running the infrastructure
+- Development process
+ 1. Running the Code
+ 2. Adding new code/functionality
+  - Adding Code
+  - Adding libraries/imports
+  - Adding API Endpoints
+- Documentation
+ 1. API (Swagger)
+ 2. Functions' docs
+
+********
+
+## Installation for developers
 ### Prerequisites:
 First of all you need to have these requirements installed :
 
@@ -31,7 +50,7 @@ This should get the following up and running :
 - 1 ethereum monitoring interface can be accessed via http://localhost:3000/ .
 
 
-To kill the containers guess what :grin: : 
+To kill the containers guess what :grin: :
 ```bash
 cd Infra/
 docker-compose down
@@ -43,7 +62,7 @@ docker-compose down
 
 You can run the code using either:
 
-1. [**Running on your machine directly.**](https://github.com/blockchain-emr/back/blob/master/README.md#L38)
+1. [**Running on your machine directly.**](https://github.com/blockchain-emr/back/blob/master/README.md#to-run-on-your-machine-directly-)
 
 2. [**Running in a docker container.**](https://github.com/blockchain-emr/back/blob/master/README.md#L62)
 
@@ -80,6 +99,8 @@ Forget about it right now, I'm fixing some issues with this approach.
 _______________
 
 ### 2- Adding new code/functionality:
+
+#### Adding Code:
 The project code can be found at ```src/app``` and organized as the following :
 
 - ```api```  : contains code for api endpoints.
@@ -89,6 +110,21 @@ The project code can be found at ```src/app``` and organized as the following :
 - ```utils```  : contains helper functions, utilities, etc.
 
 - ```docs```  : contains any documents related to the code (not the whole project, only the code).
+
+
+#### Adding libraries/imports:
+**When installing/using additional libraries in the code please, please, please don't forget to append it to the ``src/requirements.txt1``**
+```bash
+pip freeze > requirements.txt
+```
+
+#### Adding API Endpoints:
+You can create a file with the category your creating endpoints to, for example ``account_details.py`` contains functions to do CRUD on user data like name, balance, etc.
+
+Above the function your write, please use ``@swag_from("path")`` decorator to refer to the swagger yaml documentation.
+
+When done writing your endpoints, if you created a new file don't forget to add and import line in ``app.py``  to make it work like :
+```from api.account_details import *```.
 
 
 Happy Coding !! :grinning:
@@ -106,7 +142,7 @@ The documentation for each endpoint can be found at ```src/app/docs/swagger/<cat
 
 
 
-**Functions :**
+**Functions' docs :**
 
 You can find inline docs in functions, it's basically consists of:
 
