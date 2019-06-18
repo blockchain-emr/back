@@ -117,7 +117,7 @@ The project code can be found at ```src/app``` and organized as the following :
 
 
 #### Adding libraries/imports:
-**When installing/using additional libraries in the code please, please, please don't forget to append it to the ``src/requirements.txt1``**
+**When installing/using additional libraries in the code please, please, please don't forget to append it to the ``src/requirements.txt``**
 ```bash
 pip freeze > requirements.txt
 ```
