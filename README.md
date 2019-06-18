@@ -127,7 +127,11 @@ You can create a file with the category your creating endpoints to, for example 
 
 Above the function your write, please use ``@swag_from("path")`` decorator to refer to the swagger yaml documentation.
 
-When done writing your endpoints, if you created a new file don't forget to add and import line in ``app.py``  to make it work like :  ```python from api.account_details import *``` .
+When done writing your endpoints, if you created a new file don't forget to add and import line in ``app.py``  to make it work like :  
+```python
+#from api.<file-you-added> import *
+from api.account_details import *
+```
 
 
 Happy Coding !! :grinning:
