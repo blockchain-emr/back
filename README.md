@@ -50,6 +50,7 @@ This should get the following up and running :
 - 1 Bootstrap node.
 - 1 geth (ethereum node) running with rpc port 8545 exposed.
 - 1 ethereum monitoring interface can be accessed via http://localhost:3000/ .
+- 1 IPFS node.
 
 
 To kill the containers guess what :grin: :
@@ -94,7 +95,7 @@ pip install -r requirements.txt
    ```bash
       apt-get install python3-dev
    ```
- 
+
 3. run the code with --debug option (recommended).
 ```bash
 cd src/app
