@@ -77,7 +77,7 @@ cd src/
 #creating virtual env
 virtualenv venv
 #activating the virtual env
-bash venv/bin/activate
+source venv/bin/activate
 ```
 
 2. Make sure to install the requirements.
