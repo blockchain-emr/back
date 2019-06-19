@@ -85,7 +85,16 @@ source venv/bin/activate
 cd src/
 pip install -r requirements.txt
 ```
-
+**NOTE: IF you Encounter Python.h not found error, make sure to install python development tools like so:**
+* Fedora/Redhat
+   ```bash
+      dnf install python3-devel
+   ```
+* Ubuntu/Debian
+   ```bash
+      apt-get install python3-dev
+   ```
+ 
 3. run the code with --debug option (recommended).
 ```bash
 cd src/app
