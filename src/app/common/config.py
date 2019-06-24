@@ -1,12 +1,26 @@
 #constants
 from flask import Flask, jsonify, abort, request
 import logging
+import datetime as dt
 from flasgger import Swagger,swag_from
-ETH_NODE_URI = "http://localhost:8545"
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token, get_jwt_identity, jwt_refresh_token_required, create_refresh_token
+)
 
-global app, log
+
+ETH_NODE_URI = "http://localhost:8545"
+ETH_KEYSTORE_RELATIVE_PATH = "../../Infra/files/keystore/"
+
+global app, log,jwt, token_expire,refresh_expire,reset_expire
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = b'\x1bY!*?\xbb9\xb4\x98\xb0\xd6\r\xe7\x089\xdd\xc55\x80w\xd4\xc3\xce\xecM.\xc7\xd1(i' #os.urandom(50)
 swagger = Swagger(app)
+jwt = JWTManager(app)
+
+token_expire   = dt.timedelta(seconds=14400)# 4 hours #days=2)
+refresh_expire = dt.timedelta(days=0.5)
+reset_expire   = dt.timedelta(seconds=10800)# 3 hours
+
 
 formater = logging.Formatter("%(asctime)s In %(filename)s : %(message)s")
 formater.datefmt = "%Y/%m/%d %H:%M:%S"
