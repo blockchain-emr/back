@@ -1,0 +1,66 @@
+  Authentication endpoint to get access token and user data.
+---
+content: application/json
+tags:
+  - Authentication
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        address:
+          type: string
+          content: application/json
+          example: '0x64c53df7a404b9d83a49cc8d02edb11f2300efee'
+          required: true
+        password:
+          type: string
+          content: application/json
+          example: 'hossam'
+          format: password
+          required: true
+definitions:
+  msg:
+    type: object
+    properties:
+      "":
+        type: string
+
+responses:
+  200:
+    description: A list of all the user data and an access token
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "" : {
+      'access_token': ' eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ',
+      'refresh_token': ' eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ'}
+  400 - 2:
+    description: Error because no email found or no password found
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      case 1: {
+        "msg": "Missing email parameter"
+        }
+      case 2: {
+        "msg": "Missing password parameter"
+        }
+  401:
+    description: Error because either the email is not registered or the password is incorrect
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "": {
+        "msg": "Invaild credentials"
+        }
+  406:
+    description: Error because this endpoint accepts json data only
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "": {
+        "msg": "Not Acceptable data format."
+        }
