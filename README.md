@@ -76,7 +76,7 @@ You can run the code using either:
 ```bash
 cd src/
 #creating virtual env
-virtualenv $(which python3) venv
+virtualenv -p $(which python3) venv
 #activating the virtual env
 source venv/bin/activate
 ```
