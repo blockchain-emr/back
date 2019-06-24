@@ -1,4 +1,4 @@
-import sys
+import sys, json
 sys.path.append("..")
 from common.config import *
 from utils import ethereum as eth
@@ -23,9 +23,10 @@ def auth():
 
     user_identity = {
         "address" : eth_address,
-        "creation_date" : password_validation["data"],
         "password": password #TODO: kill myself for this
      }
+    user_identity = json.dumps(user_identity)
+    print(user_identity)
 
     access_token  = create_access_token(identity=user_identity, expires_delta = token_expire)
     refresh_token = create_refresh_token(identity=user_identity,expires_delta = refresh_expire)
