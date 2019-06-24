@@ -1,14 +1,21 @@
 import sys
+from json import loads as jloads
 sys.path.append("..")
 from utils import ethereum as eth
 from common.config import *
 
+@app.route('/account/balance', methods=['GET'])
+@jwt.invalid_token_loader
+@jwt_required
 @swag_from('../docs/swagger/account_details/get_balance.yml')
-@app.route('/account/balance/<string:acc_id>', methods=['GET'])
-def get_balance(acc_id):
-    balance = eth.get_balance(acc_id)
+def get_balance():
+    current_user = jloads(get_jwt_identity())
+    address = current_user["address"]
+    password = current_user["password"]
+    print("Current user is : {}, with password : {}".format(address, password))
+    balance = eth.get_balance(address)
     if balance is not None:
       print(type(balance))
-      return jsonify({'balance': balance}),200
+      return jsonify({'balance': balance, "current_user_adress" : address}),200
     else:
       return jsonify({'result': "Invalid account address."}),400
