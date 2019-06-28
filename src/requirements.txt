@@ -50,3 +50,4 @@ wcwidth==0.1.7
 web3==4.9.2
 websockets==6.0
 Werkzeug==0.15.4
+ipfshttpclient==0.4.12
