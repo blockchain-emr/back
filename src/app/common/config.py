@@ -1,6 +1,7 @@
 #constants
 from flask import Flask, jsonify, abort, request
 import logging
+import os
 import datetime as dt
 from flasgger import Swagger,swag_from
 from flask_jwt_extended import (
@@ -9,7 +10,8 @@ from flask_jwt_extended import (
 
 
 ETH_NODE_URI = "http://localhost:8545"
-ETH_KEYSTORE_RELATIVE_PATH = "../../Infra/files/keystore/"
+ETH_KEYSTORE_RELATIVE_PATH = "../../../Infra/files/keystore/"
+ETH_KEYSTORE_ABS_PATH = os.path.abspath(ETH_KEYSTORE_RELATIVE_PATH)
 
 global app, log,jwt, token_expire,refresh_expire,reset_expire
 app = Flask(__name__)
