@@ -1,5 +1,25 @@
 version: '2'
 services:
+  ganache:
+    image: trufflesuite/ganache-cli:v6.2.5
+    expose:
+      - "8555"
+    ports:
+      - "8555:8545"
+    volumes:
+        - ./ganache_data:/ganache_data
+    entrypoint:
+      - node
+      - /app/ganache-core.docker.cli.js
+      - --deterministic
+      - --db=/ganache_data
+      - --mnemonic
+      - 'final ill mechanic resource legal puppy property tumble razor left pupil boy'
+      - --networkId
+      - '5777'
+      - --hostname
+      - '0.0.0.0'
+      - --debug
   bootstrap:
     build: monitored-geth-client
     restart: on-failure

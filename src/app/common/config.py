@@ -9,7 +9,7 @@ from flask_jwt_extended import (
 )
 
 
-ETH_NODE_URI = "http://localhost:8545"
+ETH_NODE_URI = "http://localhost:8555"
 ETH_KEYSTORE_RELATIVE_PATH = "../../../Infra/files/keystore/"
 ETH_KEYSTORE_ABS_PATH = os.path.abspath(ETH_KEYSTORE_RELATIVE_PATH)
 

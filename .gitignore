@@ -1,5 +1,6 @@
 ####################################! My custom entries !#####################################
 Infra/ipfs-storage/*
+Infra/ganache_data
 *.pyc
 
 
