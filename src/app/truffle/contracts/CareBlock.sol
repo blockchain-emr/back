@@ -1,42 +1,28 @@
 pragma solidity ^0.5.0;
 
 contract CareBlock {
-	uint public taskCount = 0;
+	uint public patientCount = 0;
 
-	struct Task {
+	struct Patient {
 		uint id;
-		string content;
-		bool completed;
+		string name;
+		string IPFSCareBlock;
+		bool verified;
 	}
 
-	mapping(uint => Task) public tasks;
-
-	event TaskCreated(
-		uint id,
-		string content,
-		bool completed
-	);
-
-	event TaskCompleted(
-		uint id,
-		bool completed
-	);
+	mapping(address => Patient) public patients;
 
 	constructor () public {
-		createTask("Check out dappuni.com");
+		addPatient(
+			0xAd663308B4c65C23bb01C08a002331D1d8878C71,
+			"James T. Kirk",
+			'QmZtdeqehYHM6ahSsgRJdS7kMR1FMBuU9Dyup9CnSfEC3U'
+		);
 	}
 
-	function createTask(string memory _content) public {
-		taskCount++;
-		tasks[taskCount] = Task(taskCount, _content, false);
-		emit TaskCreated(taskCount, _content, false);
+	function addPatient(address _patientAddress, string memory name, string memory _ipfsAddress) public {
+		patientCount++;
+		patients[_patientAddress] = Patient(patientCount, name, _ipfsAddress, false);
+		// emit event if needed
 	}
-
-	function toggleCompleted(uint _id) public {
-		Task memory _task = tasks[_id];
-		_task.completed = !_task.completed;
-		tasks[_id] = _task;
-		emit TaskCompleted(_id, _task.completed);
-	}
-
 }
