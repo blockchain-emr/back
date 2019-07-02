@@ -48,19 +48,14 @@ def validate_password(acc_address, password):
     if w3.isAddress(acc_address) is True:
         acc_address = acc_address[2:].lower()
 
-        #NOTE: key file format, ay 5edma ;) -> UTC--yyyy-MM-dd'T'HH-mm-ss.SSSSSSSSS'Z'--acc_address
-        file_full_path = "{}*--{}".format(ETH_KEYSTORE_RELATIVE_PATH,acc_address)
+        file_full_path = "{}{}".format(ETH_KEYSTORE_RELATIVE_PATH,acc_address) 
         print("file address = {}, cwd = {}".format(file_full_path,os.getcwd()))
         keystore_file = glob(file_full_path)
         print("keystore file : '{}'".format(keystore_file))
         if keystore_file:
             keystore_file = keystore_file[0]
-            #NOTE : date format (according to python strptime) '%Y-%m-%dT%H-%M-%S'
-            #date_created = dt.strptime(keystore_file.split("--")[1].split(".")[0], '%Y-%m-%dT%H-%M-%S').date()
-            date_created = keystore_file.split("--")[1].split(".")[0]
             if decrypt_private_key(keystore_file, password) is not None:
                 state["result"] = True
-                state["data"] = date_created
             else:
                 state["data"] = "Invalid password."
         else:
