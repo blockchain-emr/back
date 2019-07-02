@@ -1,5 +1,7 @@
 ####################################! My custom entries !#####################################
 Infra/ipfs-storage/*
+Infra/data/history
+Infra/data/geth/*
 *.pyc
 
 
