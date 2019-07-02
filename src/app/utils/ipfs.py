@@ -1,5 +1,5 @@
 import ipfshttpclient as ipfs
-import os
+import os, json
 
 class IpfsEmr:
     def __init__(self, host, port):
@@ -58,9 +58,39 @@ class IpfsEmr:
             file_hash = file_data['Hash']
             file_name = file_data['Name']
 
-            content = self._client.cat(file_hash).decode("utf-8")
-            print(f"The {file_name} contains: \n{content}")
-                
+            content = self._client.cat(file_hash).decode('utf-8')
+            print(f'The {file_name} contains: \n{content}')
+    
+
+
+    def create_folder_structure(self, patient_name):
+        """
+        Creating the folder structure for every NEW_ADDED patient
+        to the blockchain, and creates initial files with them to 
+        store meta data about our two folders (lab_results, medical_records)
+        """
+
+        lab_results = f'./{patient_name}/lab_results'
+        medical_records = f'./{patient_name}/medical_records'
+
+        meta_data_lr = f'./{patient_name}/lab_results/meta_data_lr.json'
+        meta_data_mr = f'./{patient_name}/medical_records/meta_data_mr.json'
+
+
+        os.makedirs(lab_results, exist_ok=True)
+        os.makedirs(medical_records, exist_ok=True)
+
+        # creating initial files as meta data for every folder to keep track of the folders
+        data = {'current_num': 0}
+
+        create_meta_data_files(path=meta_data_lr, data=data)
+        create_meta_data_files(path=meta_data_mr, data=data)
+
+        # Pushing the folder to the blockchain
+
+        return self.add_folder(f'./{patient_name}')
+
+
 
     def close(self):
         """
@@ -69,22 +99,18 @@ class IpfsEmr:
         self._client.close()
 
 
-if __name__ == "__main__":
-`
-    # ipfs = IpfsEmr('127.0.0.1', '5001')
-
-    # robin_hash = ipfs.add_file('hosting/robin.txt')
-    # f_hash = ipfs.add_file('hosting/f.txt')
-    # folder_hash = ipfs.add_folder('hosting/test')
-
-    # robin_cont = ipfs.get_file(robin_hash)
-    # print(f'That is the content of the great Robin\'s file:\n{robin_cont}')
-
-    # f_cont = ipfs.get_file(f_hash)
-    # print(f'That is the content of the f\'s file:\n{f_cont}')
-
-    # ipfs.get_folder(folder_hash)
-
-    # ipfs.close()
 
 
+def create_meta_data_files(path, data):
+    with open(path, 'w', encoding='utf-8') as outfile:
+        json.dump(data, outfile, ensure_ascii=False, indent=2)
+
+
+
+if __name__ == '__main__':
+    ipfs = IpfsEmr('127.0.0.1', '5001')
+    
+    new_user = 'Ahmed'
+    new_user_Hash = ipfs.create_folder_structure(new_user)
+
+    
