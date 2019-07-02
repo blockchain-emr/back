@@ -45,9 +45,26 @@ services:
     build: eth-netstats
     restart: on-failure
     container_name: netstats
+    networks:
+      - main
     environment:
       - WS_SECRET=eth-net-stats-secret
     volumes:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "3000:3000"
+
+  ipfs:
+    container_name: ipfs
+    hostname: ipfs
+    image: ipfs/go-ipfs:latest
+    restart: on-failure
+    networks:
+      - main
+    volumes:
+      - ./ipfs-storage/export:/export
+      - ./ipfs-storage/data:/data/ipfs
+    ports:
+      - "8080:8080"
+      - "4001:4001"
+      - "5001:5001"
