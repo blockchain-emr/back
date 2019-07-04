@@ -123,6 +123,10 @@ class IpfsEmr:
 
         new_folder_hash = self.push_patient_folder(f'./{folder_hash}')
 
+        # removing folders after adding it
+        print(f'removing the old directory{folder_hash}')
+        shutil.rmtree(f'./{folder_hash}')
+
         return new_folder_hash
 
 
@@ -197,7 +201,7 @@ if __name__ == '__main__':
     ipfsemr = IpfsEmr('127.0.0.1', '5001')
 
     # creating a user in the blockchain
-    robin = 'robin'
+    robin = 'HelloThere'
     robin_hash = ipfsemr.create_folder_structure(robin)
 
     # pushing a medical record to ipfs
