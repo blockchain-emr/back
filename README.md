@@ -34,6 +34,8 @@ First of all you need to have these requirements installed :
 - [python == 3.6.x (python3.7 is not the same)](https://realpython.com/installing-python/)
 - pip
 - [virtualenv](https://virtualenv.pypa.io/en/latest/installation/)
+- [nodejs](https://nodejs.org/en/download/)
+- truffle, just run `sudo npm install -g truffle@5.0.2`
 
 ****
 ### Running the infrastructure :
