@@ -25,4 +25,14 @@ contract CareBlock {
 		patients[_patientAddress] = Patient(patientCount, name, _ipfsAddress, false);
 		// emit event if needed
 	}
+
+	function updatePatientIPFS(address _patientAddress, string memory _ipfsAddress) public {
+		// Update patient's hash on IPFS
+		patients[_patientAddress].IPFSCareBlock = _ipfsAddress;
+	}
+
+	function verifyPatient(address _patientAddress, bool isVerified) public {
+		// Update patient verification status
+		patients[_patientAddress].verified = isVerified;
+	}
 }
