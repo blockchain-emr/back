@@ -48,7 +48,7 @@ def validate_password(acc_address, password):
     if w3.isAddress(acc_address) is True:
         acc_address = acc_address[2:].lower()
 
-        file_full_path = "{}{}".format(ETH_KEYSTORE_RELATIVE_PATH,acc_address) 
+        file_full_path = "{}*--{}".format(ETH_KEYSTORE_RELATIVE_PATH,acc_address)
         print("file address = {}, cwd = {}".format(file_full_path,os.getcwd()))
         keystore_file = glob(file_full_path)
         print("keystore file : '{}'".format(keystore_file))
@@ -95,5 +95,19 @@ def decrypt_private_key(keystore_file_path, password):
 
 
 
-def create_account():
-    pass
+def create_account(password):
+    """
+        Creates an account on the chain.
+
+        Args:
+          password <str> : the password to be used to encrypt the private key.
+
+        Retruns:
+          address <str> : Hexadecimal address of the created account, None if error.
+    """
+    try:
+        if password:
+            return w3.personal.newAccount(password)
+    except Exception as e:
+        print("failed to create account.")
+    return None
