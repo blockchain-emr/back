@@ -139,6 +139,13 @@ class CareBlocks:
     def get_contract_instance(self, name):
 
         contract = self.get_contract_json(name)
+        
+        if 'contractAddress' not in contract:
+            print("Contract not deployed yet")
+            print("Deploying.....")
+            self.deploy_contract(name)
+            contract = self.get_contract_json(name)
+        
         return self.w3.eth.contract(
             contract['contractAddress'],
             abi=contract['abi']
@@ -161,7 +168,7 @@ class CareBlocks:
             patient_name,
             ipfs_address
         ).transact(
-            {'from': self.w3.eth.accounts[0]}
+            {'from': patient_address}
         )
 
         tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
@@ -169,15 +176,51 @@ class CareBlocks:
 
 
     # get patient CareBlock from blockchain
-    def get_patient(self, address):
+    def get_patient(self, patient_address):
         contract_instance = self.get_contract_instance(self.active_contract_name)
 
         # access patient CareBlock by his address
-        patient = contract_instance.call().patients(address)
+        patient = contract_instance.call().patients(patient_address)
 
-        print("Here the patient CareBlock :)")
+        print("Here's the patient CareBlock :)")
         print(patient)
         return patient
+
+
+    # update patient IPFS hash
+    def update_patient_ipfs(self, patient_address, ipfs_address):
+        contract_instance = self.get_contract_instance(self.active_contract_name)
+        
+        # create transaction
+        tx_hash = contract_instance.functions.updatePatientIPFS(
+            patient_address,
+            ipfs_address
+        ).transact(
+            {'from': patient_address}
+        )
+        
+        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+        print("Updated patient IPFS hash")
+
+
+    # update patient verification status
+
+    def verify_patient(self, patient_address, is_verified=True):
+        contract_instance = self.get_contract_instance(
+            self.active_contract_name)
+
+        # create transaction
+        tx_hash = contract_instance.functions.verifyPatient(
+            patient_address,
+            is_verified
+        ).transact(
+            {'from': patient_address}
+        )
+
+        # wait for it to be mined
+        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+        print("Updated patient verificatation status to:", is_verified)
+
 
     # possible additions...
     # get accounts
