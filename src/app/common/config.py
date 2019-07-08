@@ -12,7 +12,7 @@ from flask_jwt_extended import (
 ETH_NODE_URI = "http://localhost:8545"
 ETH_KEYSTORE_RELATIVE_PATH = "../../Infra/data/keystore/"
 ETH_KEYSTORE_ABS_PATH = os.path.abspath(ETH_KEYSTORE_RELATIVE_PATH)
-CONTRACTS_PATH = os.path.abspath("../truffle/")
+CONTRACTS_PATH = os.path.abspath("truffle/")
 
 global app, log,jwt, token_expire,refresh_expire,reset_expire
 app = Flask(__name__)
