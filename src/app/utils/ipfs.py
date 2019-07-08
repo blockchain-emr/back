@@ -89,169 +89,37 @@ class IpfsEmr:
         return new_patient_hash
 
 
+
+    def add_chronics(self, patient_hash, chronic_data):
+        # add json file then update the field in the patient_data file
+        chronic_hash = self.push_json_file(chronic_data)
+        patient_data = self.get_json_file(patient_hash)
+
+        # adding the chronic file hash into the patient data file
+        patient_data['chronic'] = chronic_hash
+        print(patient_data)
+        new_patient_hash = self.push_json_file(patient_data)
+
+        return new_patient_hash
+    
+
+
+    def retreive_chronics(self, patient_hash):
+        patient_data = self.get_json_file(patient_hash)
+        chronics_data = patient_data['chronic']
+
+        if chronics_data:
+            return chronics_data
+        else:
+            return 'This patient does not have any chronics'
+
+    
+
     # README -> DEPRECATION FROM HERE TILL THE END
     def ls_folder_content(self, folder_hash):
         folder_data = self._client.ls(folder_hash)
         folder_content = folder_data['Objects'][0]['Links']
         return folder_content
-
-
-
-    def push_patient_folder(self, folder_path):
-        """
-        Pushing an entire folder to ipfs and returning the hash of the
-        parent folder to be stored in the blockchain
-        """
-
-        if os.path.isdir(folder_path):
-            res = self._client.add(folder_path, recursive=True)
-            folder_hash = res[-1]['Hash']
-            print(f'folder has been added with an address {folder_hash}')
-            return folder_hash
-
-        else:
-            print('The given path is not valid')
-            exit(1)
-
-
-
-    def pull_patient_folder(self, folder_hash):
-        self._client.get(folder_hash)
-
-
-
-    def create_folder_structure(self, patient_name):
-        """
-        Creating the folder structure for every NEW_ADDED patient
-        to the blockchain, and creates initial two folders
-        (lab_results, medical_records)
-        """
-
-        lab_results = f'./{patient_name}/lab_results'
-        medical_records = f'./{patient_name}/medical_records'
-
-        os.makedirs(lab_results, exist_ok=True)
-        os.makedirs(medical_records, exist_ok=True)
-
-        folder_hash = self.push_patient_folder(f'./{patient_name}')
-
-        # removing folder after pushing it
-        print('removing the old directory')
-        shutil.rmtree(f'./{patient_name}')
-
-        return folder_hash
-
-
-
-    def add_medical_record(self, folder_hash, data):
-        """
-        Adding new medical record for a given patient taking a json file as the data
-        which will contain two fields the first one the lab results and the second will
-        be the medical record
-        json_file{
-            'lr': {
-                'file_ext_1': 'ext',
-                'encrypted_data_1': 'data',
-                'file_ext_2': 'ext',
-                'data': 'encrypted_data'
-            },
-            'mr': 'encrypted_json_file'
-        }
-        """
-
-        self.pull_patient_folder(folder_hash)
-        
-        try:
-            data = json.loads(data)
-        except Exception as exc:
-            print(f'Can not parse the file given the exception: \n {exc}')
-        
-        if data['mr'] is None:
-            print("Null value for the medical record in the given data")
-        else:
-            medical_record_data = data['mr']
-
-            fname_as_time_stam = time.strftime("%Y%m%d%H%M%S")
-            medical_record_file_path = f'{folder_hash}/medical_records/{fname_as_time_stam}'
-
-            try:
-                with open(medical_record_file_path, 'x') as mr_file:
-                    print('writing to the local file')
-                    mr_file.write(medical_record_data)
-            except Exception as exc:
-                print(f'Can not create and write to the new medical record {exc}')
-
-
-        # TODO writing more than one file with their extension
-        if data['lr'] is None:
-            print('Null value for the lr in the given data')
-        else:
-            lab_result = data['lr']
-            print(lab_result)
-
-        new_folder_hash = self.push_patient_folder(f'./{folder_hash}')
-
-        # removing folders after adding it
-        print(f'removing the old directory{folder_hash}')
-        shutil.rmtree(f'./{folder_hash}')
-
-        return new_folder_hash
-
-
-
-    def get_patient_mrs(self, folder_hash):
-        """
-        Getting the content of the MRs for a given patient from ipfs then
-        concatinate all those MR for returning it to the user as one json file
-        """
-        # Getting the MR folder hash
-        nested_folders_data = self.ls_folder_content(folder_hash)
-
-        mr_folder_hash = ''
-        for folder in nested_folders_data:
-            if folder['Name'] == 'medical_records':
-                mr_folder_hash = folder['Hash']
-                print(f'Getting medical record folder Hash:{mr_folder_hash}')
-                break
-        
-        #Getting all the medical record given the mr_folder_hash
-        if mr_folder_hash:
-            files_data = self.ls_folder_content(mr_folder_hash)
-        else:
-            print('Can not get the medical record folder hash')
-            exit(1)
-
-        # getting the files content and compine them together
-        all_mr_data = []
-        if files_data:
-            for file_info in files_data:
-                file_content = self.get_file_content(file_info['Hash'])
-                data = {'Name': file_info['Name'], 'Content': file_content}
-                all_mr_data.append(data)
-        else:
-            print('Can not get the medical record files data')
-            exit(1)
-        
-        # ordering the list
-        all_mr_data_sorted = sorted(all_mr_data, key=lambda k: k['Name'])
-        
-        return json.dumps(all_mr_data_sorted)
-
-
-
-    def get_patient_data(self, folder_hash):
-        """
-        Getting all the data for a given patient These data 
-        Includes all his medical records and all his lab results
-        """
-       
-        pass
-
-
-
-    def get_patient_lr(self, folder_hash):
-        #TODO looping over all the lr files and compine them into one file
-        pass
 
 
 
@@ -288,6 +156,27 @@ if __name__ == '__main__':
 
     new_robin_hash = ipfsemr.edit_patient_profile(robin_hash, patient_prof_edit)
     print(f'Get the new patient profile: {ipfsemr.get_patient_profile(new_robin_hash)}')
+
+
+    # adding chronics to an existing patient
+    # as chronics gonna be a single file so the doctor should every time in editing add
+    # the new edits then send the whole file
+    chronics_data = {
+        'issues': ['diabetes type 1', 'High blood pressure'],
+        'allergies': {
+            'food allergies': ['milk', 'egg', 'Peanuts'],
+            'others': ['Asthma']
+        }
+    }
+
+    # adding new chronic file
+    new_robin_hash_2 = ipfsemr.add_chronics(new_robin_hash, chronics_data)
+
+    # retrive chronics
+    chronics_data_ipfs = ipfsemr.retreive_chronics(new_robin_hash_2)
+    print(f'Getting those chronics data from ipfs{chronics_data}')
+
+
 
     ipfsemr.close()
 
