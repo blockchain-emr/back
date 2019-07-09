@@ -139,10 +139,30 @@ class IpfsEmr:
 
     def retrieve_appointement_ts(self, patient_hash, last_time_stamp):
         """
-        Taking a timestamp and retrieve all the appointments that happened after that
-        this timestamp
+        Taking a timestamp and retrieve all the appointments that happened 
+        after this timestamp
         """
-        pass
+        last_time_stamp = int(last_time_stamp)
+        # getting all the time stamps from the appointments dictionary
+        patient_data = self.get_json_file(patient_hash)
+        appointments_data = patient_data['appointments']
+
+        # appointments_ts = [*appointments_data]
+        all_appointments = {}
+        if appointments_data:
+            for ts, file_hash in appointments_data.items():
+                if last_time_stamp < int(ts):
+                    print(f'{last_time_stamp} is smaller than {int(ts)}')
+                    data = self.get_json_file(file_hash)
+                    all_appointments[ts] = data
+                
+            print(all_appointments)
+            return all_appointments
+
+        else:
+            print('The given patient doesn\'t have any previous appointments')
+        
+        
         
 
 
@@ -153,15 +173,15 @@ class IpfsEmr:
         appointements_data = patient_data['appointments'] # dict {'tiemstamp': 'file_hash'}
         # print(f'IN fun retrieve_all_appointements getting the app data {appointements_data}')
 
-        all_appointements = {}
+        all_appointments = {}
         if appointements_data:
             for ts, file_hash in appointements_data.items():
                 data = self.get_json_file(file_hash)
                 print(f'Time Stamp: {ts}, has data {data}')
-                all_appointements[ts] = data
+                all_appointments[ts] = data
                 
-                print(all_appointements)
-            return all_appointements
+            print(all_appointments)
+            return all_appointments
 
         else:
             print('The given patient doesn\'t have any previous appointments')
@@ -264,7 +284,18 @@ if __name__ == '__main__':
 
     # retrieving after everything
     robin_final_data = ipfsemr.retrieve_all_appointements(robin_hash_3)
-    print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS SHIT:\n\n {robin_final_data}\n')
+
+    # getting a timeStamp from our data to retrieve all the records after it
+    time_st = ''
+    for ts, data in robin_final_data.items():
+        if data['diagnoses'] == 'anything':            
+            time_st = ts
+            print(time_st)
+
+    # print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS SHIT:\n\n {robin_final_data}\n')
+    
+    robin_data_ts = ipfsemr.retrieve_appointement_ts(robin_hash_3, time_st)
+    print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS SHIT:\n\n {robin_data_ts}\n')
     
 
     ipfsemr.close()
