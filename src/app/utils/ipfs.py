@@ -1,5 +1,5 @@
 import ipfshttpclient as ipfs
-import os, json, time, shutil
+import os, json, datetime, shutil
 
 
 class IpfsEmr:
@@ -9,7 +9,7 @@ class IpfsEmr:
             print(f'\n...... Connection Established with ipfs host: {host}, and port: {port} ......\n')
 
         except ipfs.exceptions.ConnectionError as e:
-            print(f'Wollah, Not able to establish a connection given the below ERROR \n{e}.')
+            print(f'...... Wollah, Not able to establish a connection given the below ERROR: ......\n\n{e}.\n')
             exit(1)
 
 
@@ -115,6 +115,59 @@ class IpfsEmr:
 
     
 
+    # APPOINTEMENT
+    def add_appointement(self, patient_hash, appointment_data):
+        # 1 pushing the data as a file to ipfs {timestamp: appointment_file_hash}
+        appointement_hash = self.push_json_file(appointment_data)
+        appointement_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+        # time.sleep(2)
+        patient_data = self.get_json_file(patient_hash)
+        appointments = patient_data['appointments']
+
+        # adding the new key value pair to the dictionary of appointments
+        appointments[appointement_ts] = appointement_hash
+        
+        patient_data['appointments'] = appointments
+        print(f'patient data after adding appointments {patient_data}')
+
+        new_patient_hash = self.push_json_file(patient_data)
+
+        return new_patient_hash
+
+
+
+
+    def retrieve_appointement_ts(self, patient_hash, last_time_stamp):
+        """
+        Taking a timestamp and retrieve all the appointments that happened after that
+        this timestamp
+        """
+        pass
+        
+
+
+    def retrieve_all_appointements(self, patient_hash):
+        # getting all the existing appointemnts in one array then write them to one file
+        # first get the json file for the patient
+        patient_data = self.get_json_file(patient_hash)
+        appointements_data = patient_data['appointments'] # dict {'tiemstamp': 'file_hash'}
+        # print(f'IN fun retrieve_all_appointements getting the app data {appointements_data}')
+
+        all_appointements = {}
+        if appointements_data:
+            for ts, file_hash in appointements_data.items():
+                data = self.get_json_file(file_hash)
+                print(f'Time Stamp: {ts}, has data {data}')
+                all_appointements[ts] = data
+                
+                print(all_appointements)
+            return all_appointements
+
+        else:
+            print('The given patient doesn\'t have any previous appointments')
+        
+
+
     # README -> DEPRECATION FROM HERE TILL THE END
     def ls_folder_content(self, folder_hash):
         folder_data = self._client.ls(folder_hash)
@@ -144,6 +197,7 @@ if __name__ == '__main__':
 
     # adding the patient
     robin_hash = ipfsemr.add_new_patient(patient_prof)
+    ipfsemr.retrieve_all_appointements(robin_hash)
     print(f'The new added patient: {ipfsemr.get_patient_profile(robin_hash)}')
 
     # editing the profile info
@@ -177,6 +231,41 @@ if __name__ == '__main__':
     print(f'Getting those chronics data from ipfs{chronics_data}')
 
 
+    # adding appointement data
+    app_1_data = {
+        'diagnoses': 'flue',
+        'diet': 'do not eat anything just FAST',
+        'medications': ['asprine', 'rifo', 'panadol'],
+        'other shity data': 'empty'
+    }
+
+    app_2_data = {
+        'diagnoses': 'anything',
+        'diet': 'do not eat anything just FAST',
+        'medications': ['panadol'],
+        'other shity data': 'just empty'
+    }
+
+    app_3_data = {
+        'diagnoses': 'some random disease',
+        'diet': 'Eat whatever you want do not listen to the doctor',
+        'medications': ['asprine'],
+        'other shity data': 'any other shity data that any doctor can write'
+    }
+
+    robin_hash_1 = ipfsemr.add_appointement(new_robin_hash_2, app_1_data)
+    robin_data_after_first_app = ipfsemr.retrieve_all_appointements(robin_hash_1)
+
+    print(robin_data_after_first_app)
+
+    # pushing the second and third data 
+    robin_hash_2 = ipfsemr.add_appointement(robin_hash_1, app_2_data)
+    robin_hash_3 = ipfsemr.add_appointement(robin_hash_2, app_3_data)
+
+    # retrieving after everything
+    robin_final_data = ipfsemr.retrieve_all_appointements(robin_hash_3)
+    print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS SHIT:\n\n {robin_final_data}\n')
+    
 
     ipfsemr.close()
 
