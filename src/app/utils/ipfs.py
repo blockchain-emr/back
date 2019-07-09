@@ -8,7 +8,7 @@ class IpfsEmr:
             self._client = ipfs.connect(f'/ip4/{host}/tcp/{port}/http', session=True)
             print(f'\n...... Connection Established with ipfs host: {host}, and port: {port} ......\n')
 
-        except ipfs.exceptions.ConnectionError as e:
+        except Exception as e:
             print(f'...... Wollah, Not able to establish a connection given the below ERROR: ......\n\n{e}.\n')
             exit(1)
 
@@ -115,7 +115,6 @@ class IpfsEmr:
 
     
 
-    # APPOINTEMENT
     def add_appointement(self, patient_hash, appointment_data):
         # 1 pushing the data as a file to ipfs {timestamp: appointment_file_hash}
         appointement_hash = self.push_json_file(appointment_data)
@@ -136,9 +135,8 @@ class IpfsEmr:
 
 
 
-
     def retrieve_appointement_ts(self, patient_hash, last_time_stamp):
-        """
+        """all_appointmentsall_appointments
         Taking a timestamp and retrieve all the appointments that happened 
         after this timestamp
         """
@@ -147,7 +145,6 @@ class IpfsEmr:
         patient_data = self.get_json_file(patient_hash)
         appointments_data = patient_data['appointments']
 
-        # appointments_ts = [*appointments_data]
         all_appointments = {}
         if appointments_data:
             for ts, file_hash in appointments_data.items():
@@ -164,14 +161,9 @@ class IpfsEmr:
         
         
         
-
-
     def retrieve_all_appointements(self, patient_hash):
-        # getting all the existing appointemnts in one array then write them to one file
-        # first get the json file for the patient
         patient_data = self.get_json_file(patient_hash)
         appointements_data = patient_data['appointments'] # dict {'tiemstamp': 'file_hash'}
-        # print(f'IN fun retrieve_all_appointements getting the app data {appointements_data}')
 
         all_appointments = {}
         if appointements_data:
@@ -188,11 +180,79 @@ class IpfsEmr:
         
 
 
-    # README -> DEPRECATION FROM HERE TILL THE END
-    def ls_folder_content(self, folder_hash):
-        folder_data = self._client.ls(folder_hash)
-        folder_content = folder_data['Objects'][0]['Links']
-        return folder_content
+    def add_lab_result(self, patient_hash, attachments_hashs, meta_data, appointment_ts):
+        """ 
+        lab result json file it's a meta data about every lab result in which it contains
+        data about the lab, attachments, and the appointment time_stamp in which this lab
+        result happened in 
+        """
+        patient_data = self.get_json_file(patient_hash)
+        lab_result_hash = patient_data['lab_results']
+
+        lab_result_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+        lab_result_json_file = ''
+        if lab_result_hash:
+            # If there is a lab_result hash get it and append to it
+            lab_result_json_file = self.get_json_file(lab_result_hash)
+
+            lab_result_json_file[lab_result_ts] = {
+                'meta_data': meta_data,
+                'attachments': attachments_hashs,
+                'appointments_ts': appointment_ts
+            }
+
+        else:
+            # If it doesn't exist I will push it directly
+            
+            lab_result_json_file[lab_result_ts] = {
+                'meta_data': meta_data,
+                'attachments': attachments_hashs,
+                'appointments_ts': appointment_ts
+            }
+        
+        # PUSHING lab_result_json_file to ipfs
+        new_lab_result_hash = self.push_json_file(lab_result_json_file)
+
+        #PUSHING new_lab_result_hash to patient json file
+        patient_data['lab_results'] = new_lab_result_hash
+
+        new_patient_hash = self.push_json_file(patient_data)
+
+        return new_patient_hash
+    
+
+
+    def retrieve_lab_results_for_appointment(self, patient_hash, appointment_ts):
+        patient_data = self.get_json_file(patient_hash)
+        lab_result_hash = patient_data['lab_results']
+
+        if lab_result_hash:
+            # lab results json file
+            lab_results = self.get_json_file(lab_result_hash)
+
+            lab_result_data = {}
+            for _, data in lab_results.items():
+                if data['appointments_ts'] == appointment_ts:
+                    lab_result_data = data
+            if lab_result_data:
+                # getting attachments
+                attachments_hashs = lab_result_data['attachments']
+
+                self.retreive_attachments(attachments_hashs)
+        else:
+            print('There is not any lab_results data')
+
+
+
+    def add_attachments(self, img_data):
+        # TODO returning a list of files hashes that added to ipfs
+        pass
+
+
+
+    def retreive_attachments(self, attachments_hashs):
+        # TODO getting all the attachments given the hashes
+        pass
 
 
 
