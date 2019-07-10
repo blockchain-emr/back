@@ -36,10 +36,15 @@ parameters:
           content: application/json
           example: '012010101010'
           required: true
-        gender:
+        age:
           type: string
           content: application/json
-          example: 'male'
+          example: '20'
+          required: true
+        national_id:
+          type: string
+          content: application/json
+          example: '2971112233'
           required: true
 
 definitions:

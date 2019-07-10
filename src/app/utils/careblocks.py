@@ -121,7 +121,7 @@ class CareBlocksUtility:
 
             # get transaction receipt which has address
             print("Bout to send transaction")
-            tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+            tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
             contract_address = tx_receipt['contractAddress']
 
             
@@ -179,7 +179,7 @@ class CareBlocksUtility:
             {'from': patient_address}
         )
 
-        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=180)
+        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
         if tx_receipt:
             print("Successfully added Patient :)")
             self.get_patient(patient_address)
@@ -212,7 +212,7 @@ class CareBlocksUtility:
             {'from': patient_address}
         )
         
-        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
         print("Updated patient IPFS hash")
 
 
@@ -230,7 +230,7 @@ class CareBlocksUtility:
         )
 
         # wait for it to be mined
-        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
         print("Updated patient verificatation status to:", is_verified)
 
 

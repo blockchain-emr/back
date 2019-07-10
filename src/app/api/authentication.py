@@ -69,4 +69,7 @@ def register():
             ipfs_patient_hash
         )
 
-    return jsonify(address=eth_address), 201
+    return jsonify({
+                    'address': eth_address,
+                    'status_code': 201
+                    })
