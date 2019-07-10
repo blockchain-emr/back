@@ -3,6 +3,7 @@ sys.path.append("..")
 from common.config import *
 from utils import general as gutils
 from utils.careblocks import CareBlocks
+from utils.ipfs import IPFS
 
 
 @app.route('/auth',methods=['POST'])
@@ -40,13 +41,16 @@ def register():
     if not request.is_json:
         return jsonify(msg="Unacceptable data format."), 406
 
-    first_name = request.json.get("first_name",None)
-    last_name = request.json.get("last_name",None)
-    email = request.json.get("email",None)
-    gender =request.json.get("gender",None)
-    phone_number = request.json.get("phone_number",None)
-    password = request.json.get("password",None)
+    patient_json = request.json
 
+    first_name = patient_json.get("first_name",None)
+    last_name = patient_json.get("last_name",None)
+    email = patient_json.get("email",None)
+    gender = patient_json.get("gender",None)
+    phone_number = patient_json.get("phone_number",None)
+    password = patient_json.get("password",None)
+
+    # create account for patient on ethereum & give them some ether
     eth_address = CareBlocks.create_account(password)
     if not eth_address:
         return jsonify(msg="Error happened, not created."), 500
@@ -54,11 +58,15 @@ def register():
         # Unlock patient account in order to register him to the chain
         CareBlocks.w3.personal.unlockAccount(eth_address, password, 240)
 
+        # Create Patient.json for patient on IPFS & get hash
+        ipfs_patient_hash = IPFS.add_new_patient(patient_json)
+        print("Added to IPFS, patient with address:", eth_address)
+        print("Patient hash is: ", ipfs_patient_hash)
         # Add patient to block chain throught the CareBlock smart contract
         CareBlocks.add_patient(
             eth_address,
             '{} {}'.format(first_name, last_name),
-            'QxIPFS' # TODO handle IPFS
+            ipfs_patient_hash
         )
 
     return jsonify(address=eth_address), 201
