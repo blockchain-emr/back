@@ -46,9 +46,11 @@ def register():
     first_name = patient_json.get("first_name",None)
     last_name = patient_json.get("last_name",None)
     email = patient_json.get("email",None)
-    gender = patient_json.get("gender",None)
+    age = patient_json.get("age",None)
+    national_id = patient_json.get("national_id",None)
     phone_number = patient_json.get("phone_number",None)
     password = patient_json.get("password",None)
+    gender = patient_json.get("gender", None)
 
     # create account for patient on ethereum & give them some ether
     eth_address = CareBlocks.create_account(password)
