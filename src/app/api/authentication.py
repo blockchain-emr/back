@@ -43,7 +43,8 @@ def register():
     first_name = request.json.get("first_name",None)
     last_name = request.json.get("last_name",None)
     email = request.json.get("email",None)
-    gender =request.json.get("gender",None)
+    age = request.json.get("age",None)
+    national_id = request.json.get("national_id",None)
     phone_number = request.json.get("phone_number",None)
     password = request.json.get("password",None)
 
@@ -61,4 +62,7 @@ def register():
             'QxIPFS' # TODO handle IPFS
         )
 
-    return jsonify(address=eth_address), 201
+    return jsonify({
+                    'address': eth_address,
+                    'status_code': 201
+                    })
