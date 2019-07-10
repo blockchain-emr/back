@@ -2,7 +2,7 @@ import sys, json,threading, time
 sys.path.append("..")
 from common.config import *
 from utils import general as gutils
-from utils import ethereum as eth
+from utils.careblocks import CareBlocks
 
 
 @app.route('/auth',methods=['POST'])
@@ -18,14 +18,13 @@ def auth():
     if not password:
         return jsonify(msg="Missing password parameter."), 400
 
-    password_validation = eth.validate_password(eth_address,password)
+    password_validation = CareBlocks.validate_password(eth_address, password)
     if password_validation['result'] is False:
         return jsonify(msg=password_validation["data"]), 401
 
     user_identity = {
-        "address" : eth_address,
-        "password": password #TODO: kill myself for this
-     }
+        "address" : eth_address
+    }
     user_identity = json.dumps(user_identity)
     print(user_identity)
 
@@ -48,13 +47,18 @@ def register():
     phone_number = request.json.get("phone_number",None)
     password = request.json.get("password",None)
 
-    eth_address = eth.create_account(password)
+    eth_address = CareBlocks.create_account(password)
     if not eth_address:
         return jsonify(msg="Error happened, not created."), 500
     else:
-        print("Creating thread ...")
-        thread = threading.Thread(target=gutils.store_user_data, args=(first_name,last_name,email,gender,phone_number))
-        thread.daemon = True
-        thread.start()
+        # Unlock patient account in order to register him to the chain
+        CareBlocks.w3.personal.unlockAccount(eth_address, password, 240)
+
+        # Add patient to block chain throught the CareBlock smart contract
+        CareBlocks.add_patient(
+            eth_address,
+            '{} {}'.format(first_name, last_name),
+            'QxIPFS' # TODO handle IPFS
+        )
 
     return jsonify(address=eth_address), 201
