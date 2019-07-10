@@ -179,9 +179,10 @@ class CareBlocksUtility:
             {'from': patient_address}
         )
 
-        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=120)
+        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=180)
         if tx_receipt:
             print("Successfully added Patient :)")
+            self.get_patient(patient_address)
             return True
         else:
             return False
@@ -274,12 +275,12 @@ class CareBlocksUtility:
 
     
     # give some ether to newly created account
-    def give_init_ether(self, acc_address):
+    def give_init_ether(self, acc_address, nonce_offset=0):
         w3 = self.w3
 
         # required to prevent double spend problem
         # NOTE: This can be used to help with load balancing on mining chain
-        nonce = w3.eth.getTransactionCount(self.__ETH_ADMIN_ADDRESS)
+        nonce = w3.eth.getTransactionCount(self.__ETH_ADMIN_ADDRESS) + nonce_offset
 
         # build transaction
         tx = {
@@ -299,12 +300,18 @@ class CareBlocksUtility:
         signed_tx = w3.eth.account.signTransaction(tx, pk)
 
         # send transaction
-        print("gonna send init ether tx")
-        tx_hash = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print("waiting..")
-        tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-        print("tranfsered init ether to : ", acc_address)
-        print("Done boss ;)")
+        try:
+            print("gonna send init ether tx")
+            tx_hash = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
+            print("waiting..")
+            tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+            print("tranfsered init ether to : ", acc_address)
+            print("Done boss ;)")
+
+        except Exception as e:
+            print(e)
+            nonce_offset += 1
+            self.give_init_ether(acc_address, nonce_offset=nonce_offset)
 
 
     def validate_password(self, acc_address, password):
@@ -368,7 +375,7 @@ class CareBlocksUtility:
         fname = [f for f in os.listdir(ETH_KEYSTORE_RELATIVE_PATH) if f.find(
             acc_address[2:]) != -1][0]
         file_full_path = "{}{}".format(ETH_KEYSTORE_RELATIVE_PATH,fname) 
-        print("file address = {}, cwd = {}".format(file_full_path,os.getcwd()))
+        # print("file address = {}, cwd = {}".format(file_full_path,os.getcwd()))
         keystore_file = glob(file_full_path)
         print("keystore file : {}".format(keystore_file))
         if keystore_file:
