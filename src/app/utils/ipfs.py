@@ -261,8 +261,14 @@ class IpfsEmr:
         self._client.close()
 
 
+###################################################################################
+###################################################################################
+# create instance and import it whenever you need it
+IPFS = IpfsEmr('127.0.0.1', '5001')
 
 
+###################################################################################
+###################################################################################
 if __name__ == '__main__':
 
     ipfsemr = IpfsEmr('127.0.0.1', '5001')
@@ -316,21 +322,21 @@ if __name__ == '__main__':
         'diagnoses': 'flue',
         'diet': 'do not eat anything just FAST',
         'medications': ['asprine', 'rifo', 'panadol'],
-        'other shity data': 'empty'
+        'other patient data': 'empty'
     }
 
     app_2_data = {
         'diagnoses': 'anything',
         'diet': 'do not eat anything just FAST',
         'medications': ['panadol'],
-        'other shity data': 'just empty'
+        'other patient data': 'just empty'
     }
 
     app_3_data = {
         'diagnoses': 'some random disease',
         'diet': 'Eat whatever you want do not listen to the doctor',
         'medications': ['asprine'],
-        'other shity data': 'any other shity data that any doctor can write'
+        'other patient data': 'any other patient data that any doctor can write'
     }
 
     robin_hash_1 = ipfsemr.add_appointement(new_robin_hash_2, app_1_data)
@@ -352,10 +358,10 @@ if __name__ == '__main__':
             time_st = ts
             print(time_st)
 
-    # print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS SHIT:\n\n {robin_final_data}\n')
+    # print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS AMAZING TIME WE HAD:\n\n {robin_final_data}\n')
     
     robin_data_ts = ipfsemr.retrieve_appointement_ts(robin_hash_3, time_st)
-    print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS SHIT:\n\n {robin_data_ts}\n')
+    print(f'HEY YOU I NEED TO SLEEP AND THIS IS THE DATA AFTER ALL THIS AMAZING TIME WE HAD:\n\n {robin_data_ts}\n')
     
 
     ipfsemr.close()
