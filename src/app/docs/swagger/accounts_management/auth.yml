@@ -62,5 +62,5 @@ responses:
       $ref: '#/definitions/msg'
     examples:
       "": {
-        "msg": "Not Acceptable data format."
+        "msg": "Unacceptable data format."
         }

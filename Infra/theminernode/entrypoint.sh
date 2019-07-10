@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-cd /root/eth-net-intelligence-api
+cd /home/geth_user/eth-net-intelligence-api
 perl -pi -e "s/XXX/$(hostname)/g" app.json
 
 /usr/bin/pm2 start ./app.json
@@ -15,7 +15,7 @@ if [ "${1:0:1}" = '-' ]; then
 fi
 
 if [ "$MINE_WHEN_NEEDED" == "true" ]; then
-  set -- "$@" js /mine_when_needed.js
+  set -- "$@" js /home/geth_user/mine_when_needed.js
 fi
 
 echo "Running: $@"

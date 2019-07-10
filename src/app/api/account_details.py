@@ -1,7 +1,7 @@
 import sys
 from json import loads as jloads
 sys.path.append("..")
-from utils import ethereum as eth
+from utils.careblocks import CareBlocks
 from common.config import *
 
 @app.route('/account/balance', methods=['GET'])
@@ -11,9 +11,8 @@ from common.config import *
 def get_balance():
     current_user = jloads(get_jwt_identity())
     address = current_user["address"]
-    password = current_user["password"]
-    print("Current user is : {}, with password : {}".format(address, password))
-    balance = eth.get_balance(address)
+    print("Current user is : {}".format(address))
+    balance = CareBlocks.get_balance(address)
     if balance is not None:
       print(type(balance))
       return jsonify({'balance': balance, "current_user_adress" : address}),200

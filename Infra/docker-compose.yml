@@ -10,13 +10,11 @@ networks:
 services:
   bootnode:
     build: thebootnode
-    #image: ahannigan/geth-dev:bootnode
     networks:
       main:
-        ipv4_address: 172.21.0.2
+        ipv4_address: 172.21.0.4
 
   geth:
-    #image: ahannigan/geth-dev:latest
     build: theminernode
     networks:
       - main
@@ -37,9 +35,9 @@ services:
       --rpcapi "eth,web3,admin,db,net,miner,personal"
       --rpccorsdomain="*"
       --unlock 0
-      --password /root/.ethereum/passwords
+      --password /home/geth_user/.ethereum/passwords
     volumes:
-      - ./data:/root/.ethereum:rw
+      - ./data:/home/geth_user/.ethereum:rw
 
   netstats:
     build: eth-netstats

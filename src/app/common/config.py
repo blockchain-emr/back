@@ -1,5 +1,6 @@
 #constants
 from flask import Flask, jsonify, abort, request
+from flask_cors import CORS
 import logging
 import os
 import datetime as dt
@@ -12,10 +13,11 @@ from flask_jwt_extended import (
 ETH_NODE_URI = "http://localhost:8545"
 ETH_KEYSTORE_RELATIVE_PATH = "../../Infra/data/keystore/"
 ETH_KEYSTORE_ABS_PATH = os.path.abspath(ETH_KEYSTORE_RELATIVE_PATH)
-CONTRACTS_PATH = os.path.abspath("../truffle/")
+CONTRACTS_PATH = os.path.abspath("truffle/")
 
 global app, log,jwt, token_expire,refresh_expire,reset_expire
 app = Flask(__name__)
+icors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['JWT_SECRET_KEY'] = b'\x1bY!*?\xbb9\xb4\x98\xb0\xd6\r\xe7\x089\xdd\xc55\x80w\xd4\xc3\xce\xecM.\xc7\xd1(i' #os.urandom(50)
 swagger = Swagger(app)
 jwt = JWTManager(app)
