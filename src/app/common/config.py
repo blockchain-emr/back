@@ -22,7 +22,9 @@ app.config['JWT_SECRET_KEY'] = b'\x1bY!*?\xbb9\xb4\x98\xb0\xd6\r\xe7\x089\xdd\xc
 swagger = Swagger(app)
 jwt = JWTManager(app)
 
-token_expire   = dt.timedelta(seconds=14400)# 4 hours #days=2)
+# we will match this with the time we unlock the account
+# so after the token is expired the patient needs to login again so they can use the app
+token_expire = dt.timedelta(seconds=7200)  # 2 hours
 refresh_expire = dt.timedelta(days=0.5)
 reset_expire   = dt.timedelta(seconds=10800)# 3 hours
 
