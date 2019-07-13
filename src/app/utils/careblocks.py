@@ -167,13 +167,12 @@ class CareBlocksUtility:
 
 
     # add patient to blockchain
-    def add_patient(self, patient_address, patient_name, ipfs_address):
+    def add_patient(self, patient_address, ipfs_address):
 
         contract_instance = self.get_contract_instance(self.active_contract_name)
 
         tx_hash = contract_instance.functions.addPatient(
             patient_address,
-            patient_name,
             ipfs_address
         ).transact(
             {'from': patient_address}
@@ -196,8 +195,9 @@ class CareBlocksUtility:
         patient = contract_instance.call().patients(patient_address)
 
         print("Here's the patient CareBlock :)")
-        print(patient)
-        return patient
+        patient_dict = {'ipfs_hash': patient[1], 'verified': patient[2]}
+        print(patient_dict)
+        return patient_dict
 
 
     # update patient IPFS hash
