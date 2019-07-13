@@ -28,7 +28,7 @@ class CareBlocksUtility:
             node_uri = ETH_NODE_URI
             if os.path.isfile('/.dockerenv') is True:
                 node_uri = "http://infra_eth_1:8545"
-            
+
             self.w3 = Web3(Web3.HTTPProvider(
                 node_uri, request_kwargs={'timeout': 30}))
             if self.is_connected():
@@ -39,7 +39,7 @@ class CareBlocksUtility:
 
             else:
                 print("W3 couldn't connect to blockchain!")
-        
+
         except Exception as e:
             print(e)
             print("Connecting to blockchain failed!")
@@ -92,7 +92,7 @@ class CareBlocksUtility:
     # get a list of loaded contracts
     def get_loaded_contracts(self):
         return self.contracts
-    
+
 
     # deploy smart contract to chain
     def deploy_contract(self, name):
@@ -104,7 +104,7 @@ class CareBlocksUtility:
         if len(contract) == 0:
             contract = self.get_contract_json(name)
             print("Extracted contract json")
-            
+
         if contract:
             #instantiate contract
             contract_eth_instance = w3.eth.contract(
@@ -124,7 +124,7 @@ class CareBlocksUtility:
             tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
             contract_address = tx_receipt['contractAddress']
 
-            
+
 
             # save address in contract.json file for easier extraction later
             with open(self.get_contract_path(name), 'w') as out_file:
@@ -147,13 +147,13 @@ class CareBlocksUtility:
     def get_contract_instance(self, name):
 
         contract = self.get_contract_json(name)
-        
+
         if 'contractAddress' not in contract:
             print("Contract not deployed yet")
             print("Deploying.....")
             self.deploy_contract(name)
             contract = self.get_contract_json(name)
-        
+
         return self.w3.eth.contract(
             contract['contractAddress'],
             abi=contract['abi']
@@ -185,7 +185,7 @@ class CareBlocksUtility:
             return True
         else:
             return False
-        
+
 
     # get patient CareBlock from blockchain
     def get_patient(self, patient_address):
@@ -203,7 +203,7 @@ class CareBlocksUtility:
     # update patient IPFS hash
     def update_patient_ipfs(self, patient_address, ipfs_address):
         contract_instance = self.get_contract_instance(self.active_contract_name)
-        
+
         # create transaction
         tx_hash = contract_instance.functions.updatePatientIPFS(
             patient_address,
@@ -211,14 +211,14 @@ class CareBlocksUtility:
         ).transact(
             {'from': patient_address}
         )
-        
+
         try:
             tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
             print("Updated patient IPFS hash")
         except Exception as e:
             print(e)
             return False
-        
+
         return True
 
 
@@ -253,7 +253,6 @@ class CareBlocksUtility:
         try:
             if password:
                 address = self.w3.personal.newAccount(password)
-                self.give_init_ether(address)
                 return address
 
         except Exception as e:
@@ -279,7 +278,7 @@ class CareBlocksUtility:
         else:
             return None
 
-    
+
     # give some ether to newly created account
     def give_init_ether(self, acc_address):
         w3 = self.w3
@@ -295,7 +294,7 @@ class CareBlocksUtility:
             'gas': 100000,
             'gasPrice': w3.eth.gasPrice
         }
-        
+
         # sign it with admin private key
         pathk = self.get_keystore_file_path(self.__ETH_ADMIN_ADDRESS)
         pk = self.decrypt_private_key(
@@ -377,7 +376,7 @@ class CareBlocksUtility:
         acc_address = acc_address[2:].lower()
         fname = [f for f in os.listdir(ETH_KEYSTORE_RELATIVE_PATH) if f.find(
             acc_address[2:]) != -1][0]
-        file_full_path = "{}{}".format(ETH_KEYSTORE_RELATIVE_PATH,fname) 
+        file_full_path = "{}{}".format(ETH_KEYSTORE_RELATIVE_PATH,fname)
         # print("file address = {}, cwd = {}".format(file_full_path,os.getcwd()))
         keystore_file = glob(file_full_path)
         print("keystore file : {}".format(keystore_file))
@@ -403,5 +402,3 @@ CareBlocks = CareBlocksUtility()
     # print(cb.get_contract_json('CareBlock'))
     # cb.is_connected()
     # cb.deploy_contract('CareBlock')
-
-
