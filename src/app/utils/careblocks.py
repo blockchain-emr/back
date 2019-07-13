@@ -275,12 +275,11 @@ class CareBlocksUtility:
 
     
     # give some ether to newly created account
-    def give_init_ether(self, acc_address, nonce_offset=0):
+    def give_init_ether(self, acc_address):
         w3 = self.w3
-
         # required to prevent double spend problem
         # NOTE: This can be used to help with load balancing on mining chain
-        nonce = w3.eth.getTransactionCount(self.__ETH_ADMIN_ADDRESS) + nonce_offset
+        nonce = w3.eth.getTransactionCount(self.__ETH_ADMIN_ADDRESS)
 
         # build transaction
         tx = {
@@ -310,8 +309,6 @@ class CareBlocksUtility:
 
         except Exception as e:
             print(e)
-            nonce_offset += 1
-            self.give_init_ether(acc_address, nonce_offset=nonce_offset)
 
 
     def validate_password(self, acc_address, password):
@@ -369,7 +366,7 @@ class CareBlocksUtility:
                 #TODO: handle this.
                 return None
 
-
+    # get path of patients keystore file
     def get_keystore_file_path(self, acc_address):
         acc_address = acc_address[2:].lower()
         fname = [f for f in os.listdir(ETH_KEYSTORE_RELATIVE_PATH) if f.find(

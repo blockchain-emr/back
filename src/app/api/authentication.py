@@ -60,6 +60,9 @@ def register():
         # Unlock patient account in order to register him to the chain
         CareBlocks.w3.personal.unlockAccount(eth_address, password, 240)
 
+        # We don't need the password anymore 
+        del patient_json['password']
+        
         # Create Patient.json for patient on IPFS & get hash
         ipfs_patient_hash = IPFS.add_new_patient(patient_json)
         print("Added to IPFS, patient with address:", eth_address)

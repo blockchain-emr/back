@@ -6,13 +6,14 @@ contract CareBlock {
 	struct Patient {
 		uint id;
 		string name;
-		string IPFSCareBlock;
+		string IPFSCareBlock; // address of patient.json file which contains references to all their data
 		bool verified;
 	}
 
 	mapping(address => Patient) public patients;
 
 	constructor () public {
+		// this is just used for testing
 		addPatient(
 			0xAd663308B4c65C23bb01C08a002331D1d8878C71,
 			"James T. Kirk",
