@@ -34,7 +34,7 @@ def auth():
     
     # Unlock account for 2 hours, so the patient can interact with blockchain within that window
     # After this window, the access token will expire and the client needs to point them to relogin
-    CareBlocks.w3.personal.unlockAccount(eth_address, password, token_expire)
+    CareBlocks.w3.personal.unlockAccount(eth_address, password, 7200)
 
     return jsonify(access_token=access_token,refresh_token=refresh_token), 200
 
