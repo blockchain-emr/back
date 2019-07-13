@@ -30,7 +30,11 @@ def auth():
     print(user_identity)
 
     access_token  = create_access_token(identity=user_identity, expires_delta = token_expire)
-    refresh_token = create_refresh_token(identity=user_identity,expires_delta = refresh_expire)
+    refresh_token = create_refresh_token(identity=user_identity, expires_delta = refresh_expire)
+    
+    # Unlock account for 2 hours, so the patient can interact with blockchain within that window
+    # After this window, the access token will expire and the client needs to point them to relogin
+    CareBlocks.w3.personal.unlockAccount(eth_address, password, token_expire)
 
     return jsonify(access_token=access_token,refresh_token=refresh_token), 200
 
@@ -62,7 +66,7 @@ def register():
 
         # We don't need the password anymore 
         del patient_json['password']
-        
+
         # Create Patient.json for patient on IPFS & get hash
         ipfs_patient_hash = IPFS.add_new_patient(patient_json)
         print("Added to IPFS, patient with address:", eth_address)
@@ -70,7 +74,6 @@ def register():
         # Add patient to block chain throught the CareBlock smart contract
         CareBlocks.add_patient(
             eth_address,
-            '{} {}'.format(first_name, last_name),
             ipfs_patient_hash
         )
 
