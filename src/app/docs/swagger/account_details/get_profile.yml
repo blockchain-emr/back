@@ -34,7 +34,7 @@ responses:
       $ref: '#/definitions/msg'
     examples:
       "" : {
-        "profile" : {'age': '20', 'email': 'my_email@mail.com', 'first_name': 'John', 'last_name': 'Doe', 'national_id': '2971112233', 'phone_number': '012010101010'}
+        'age': '20', 'email': 'my_email@mail.com', 'first_name': 'John', 'last_name': 'Doe', 'national_id': '2971112233', 'phone_number': '012010101010'
       }
   400:
     description: Error because no such account found

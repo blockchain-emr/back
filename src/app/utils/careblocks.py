@@ -212,8 +212,14 @@ class CareBlocksUtility:
             {'from': patient_address}
         )
         
-        tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
-        print("Updated patient IPFS hash")
+        try:
+            tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash, timeout=240)
+            print("Updated patient IPFS hash")
+        except Exception as e:
+            print(e)
+            return False
+        
+        return True
 
 
     # update patient emr verification status
