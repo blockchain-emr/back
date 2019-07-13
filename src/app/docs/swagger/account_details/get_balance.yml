@@ -1,4 +1,4 @@
-  Authentication endpoint to get access token and user data.
+  Get user account balance, Authentication required.
 ---
 content: application/json
 tags:
