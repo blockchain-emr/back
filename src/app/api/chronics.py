@@ -14,7 +14,7 @@ def get_chronics():
     address = current_user['address']
 
     care_blk = CareBlocks.get_patient(address)
-    
+
     all_chronics = IPFS.retreive_chronics(care_blk['ipfs_hash'])
 
     if all_chronics:
