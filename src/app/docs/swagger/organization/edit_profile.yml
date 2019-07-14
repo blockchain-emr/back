@@ -1,0 +1,72 @@
+   Edit organization profile, Authentication required.
+---
+content: application/json
+tags:
+  - Organization
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+
+parameters:
+  - in: header
+    name: Authorization
+    schema:
+      type: string
+      format: token
+      required: true
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        full_name:
+          type: string
+          content: application/json
+          example: 'hospital name'
+          required: true
+        phone_number:
+          type: string
+          content: application/json
+          example: '01202198034'
+          required: true
+        email:
+          type: string
+          content: application/json
+          example: 'hospital@mail.com'
+          required: true
+        username:
+          type: string
+          content: application/json
+          example: 'hospitalone'
+          required: true
+
+definitions:
+  msg:
+    type: object
+    properties:
+      "":
+        type: string
+
+responses:
+  200:
+    description: An object that has organization new profile data
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "" : {
+        'full_name': 'Hospital 57357', 'email': 'my_email@mail.com', 'username': 'username', 'last_name': 'Doe', 'national_id': '2971112233', 'phone_number': '012010101010'
+      }
+  400:
+    description: Error because no such account found
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      case 1: {
+        "msg": "Invalid account address."
+        }
