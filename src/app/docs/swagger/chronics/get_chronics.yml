@@ -1,0 +1,51 @@
+   Get All the chronics data for an autharized user.
+---
+content: application/json
+tags:
+  - Chronics
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+
+parameters:
+  - in: header
+    name: Authorization
+    schema:
+      type: string
+      format: token
+      required: true
+
+definitions:
+  msg:
+    type: object
+    properties:
+      "":
+        type: string
+
+responses:
+  200:
+    description: An object that have all the user chronics icluding issues and allergies
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "" : {
+        'allergies': {
+          'food allergies': ['egg', 'meat', 'water'],
+          'medications allergies': ['asprine', 'profine'],
+        },
+        'issues': ['high blood pressure', 'diabates'],
+      }
+  400:
+    description: Error because no such account found
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      case 1: {
+        "msg": "Invalid account address."
+      }

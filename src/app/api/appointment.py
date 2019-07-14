@@ -73,7 +73,7 @@ def get_appointment_ts():
 
     appointments_after_ts = IPFS.retrieve_appointement_ts(care_blk['ipfs_hash'], time_stamp)
 
-     if appointments_after_ts:
+    if appointments_after_ts:
         return jsonify(appointments_after_ts, status=200)
     else:
         return jsonify(msg="Can't retrieve them", status=400)

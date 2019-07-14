@@ -5,10 +5,10 @@ from utils.ipfs import IPFS
 from common.config import *
 
 
-@app.route('/get/appointments', methods=['GET'])
+@app.route('/get/chronics', methods=['GET'])
 @jwt.invalid_token_loader
 @jwt_required
-@swag_from('../docs/swagger/appointment/get_all_appointments.yml')
+@swag_from('../docs/swagger/chronics/get_chronics.yml')
 def get_chronics():
     current_user = json.loads(get_jwt_identity())
     address = current_user['address']
@@ -18,13 +18,13 @@ def get_chronics():
     all_chronics = IPFS.retreive_chronics(care_blk['ipfs_hash'])
 
     if all_chronics:
-        return jsonify(all_chronics, status=200)
+        return jsonify(chronics=all_chronics, status=200)
     else:
         return jsonify(msg="Can't retrieve them", status=400)
 
 
 
-@app.route('/add/chronic', methods=['POST'])
+@app.route('/add/chronics', methods=['POST'])
 @jwt.invalid_token_loader
 @jwt_required
 @swag_from('../docs/swagger/chronics/add_chronics.yml')
@@ -47,6 +47,6 @@ def add_chronic():
     update_success = CareBlocks.update_patient_ipfs(address, new_ipfs_hash)
 
     if update_success:
-        return jsonify(status=201)
+        return jsonify(msg='Updated successfully', status=201)
     else:
         return jsonify(msg="Can't add the appointment failed", status=400)

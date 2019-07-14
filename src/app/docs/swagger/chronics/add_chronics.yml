@@ -1,0 +1,67 @@
+  Add user chronics by an autharized doctor, make sure to send all the existing chronics In case of updating.
+---
+content: application/json
+tags:
+  - Chronics
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+
+parameters:
+  - in: header
+    name: Authorization
+    schema:
+      type: string
+      format: token
+      required: true
+
+  - name: body
+    in: body
+    required: true
+    content: application/json
+    example: {
+      'allergies': {
+          'food allergies': ['egg', 'meat', 'water'],
+          'medications allergies': ['asprine', 'profine'],
+      },
+      'issues': ['high blood pressure', 'diabates'],
+    } 
+      
+      
+
+definitions:
+  msg:
+    type: object
+    properties:
+      "":
+        type: string
+
+responses:
+  201:
+    description: Updated succefully
+    schema:
+      $ref: '#/definitions/msg'
+
+  500:
+    description: General error 
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "": {
+        "msg": "Error happened, not created."
+        }
+
+  406:
+    description: Error because this endpoint accepts json data only
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "": {
+        "msg": "Unacceptable data format."
+      }
