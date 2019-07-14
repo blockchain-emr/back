@@ -46,11 +46,16 @@ def get_all_appointments():
     address = current_user['address']
 
     care_blk = CareBlocks.get_patient(address)
-    
+
+    appointments = []
     all_appointments = IPFS.retrieve_all_appointements(care_blk['ipfs_hash'])
+    for i in all_appointments.keys():
+        appointment = all_appointments[i]
+        appointment["timestamp"] = i
+        appointments.append(appointment)
 
     if all_appointments:
-        return jsonify(all_appointments=all_appointments, status=200)
+        return jsonify(appointments), 200
     else:
         return jsonify(msg="Can't retrieve them", status=400)
 
@@ -80,4 +85,3 @@ def get_appointment_ts():
         return jsonify(all_appointments=appointments_after_ts, status=200)
     else:
         return jsonify(msg="Can't retrieve them", status=400)
-
