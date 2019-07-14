@@ -66,3 +66,15 @@ services:
       - "8080:8080"
       - "4001:4001"
       - "5001:5001"
+
+  mongo:
+    container_name: mongo
+    hostname: mongo
+    image: mongo:4.0
+    restart: on-failure
+    networks:
+      - main
+    volumes:
+      - ./mongodb:/data/db
+    ports:
+      - "27017:27017"
