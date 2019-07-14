@@ -106,10 +106,14 @@ class IpfsEmr:
 
     def retreive_chronics(self, patient_hash):
         patient_data = self.get_json_file(patient_hash)
-        chronics_data = patient_data['chronic']
+        chronics_hash = patient_data['chronic']
 
-        if chronics_data:
-            return chronics_data
+        if chronics_hash:
+            chronics_data = self.get_json_file(chronics_hash)
+
+            if chronics_data:
+                return chronics_data
+                
         else:
             return 'This patient does not have any chronics'
 
