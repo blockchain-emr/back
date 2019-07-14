@@ -1,0 +1,66 @@
+  Add aappointment by an autharized doctor
+---
+content: application/json
+tags:
+  - Appointments
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+
+parameters:
+  - in: header
+    name: Authorization
+    schema:
+      type: string
+      format: token
+      required: true
+
+  - in: body
+    name: body  
+    required: true
+    content: application/json
+    example: {
+      'diagnoses': 'flue',
+      'diet': "don't eat fish",
+      'medications': ['asprine', 'panadol'],
+      'hints': "null"
+    }
+      
+      
+
+definitions:
+  msg:
+    type: object
+    properties:
+      "":
+        type: string
+
+responses:
+  201:
+    description: Updated succefully
+    schema:
+      $ref: '#/definitions/msg'
+
+  500:
+    description: General error 
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "": {
+        "msg": "Error happened, not created."
+        }
+
+  406:
+    description: Error because this endpoint accepts json data only
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "": {
+        "msg": "Unacceptable data format."
+      }
