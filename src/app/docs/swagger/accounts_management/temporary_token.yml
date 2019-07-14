@@ -1,0 +1,46 @@
+  Get temporary token to access user's data.
+---
+content: application/json
+tags:
+  - Authentication
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+
+parameters:
+  - in: header
+    name: Authorization
+    schema:
+      type: string
+      format: token
+      required: true
+
+definitions:
+  msg:
+    type: object
+    properties:
+      "":
+        type: string
+
+responses:
+  200:
+    description: A temporary 1 hour acess token to access user's data
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      "" : {
+        "temporary_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ"
+      }
+  400:
+    description: Error because no such account found
+    schema:
+      $ref: '#/definitions/msg'
+    examples:
+      case 1: {
+        "msg": "Invalid account address."
+        }
