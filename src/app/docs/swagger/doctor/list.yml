@@ -1,0 +1,42 @@
+  Endpoint to list all doctors for authenticated users.
+---
+tags:
+  - Doctor
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+parameters:
+  - in: header
+    name: Authorization
+    schema:
+      type: string
+      format: token
+      required: true
+responses:
+  200:
+    description: A list of all doctors
+    schema:
+      $ref: '#/definitions/user'
+    examples:
+      "": [
+          {
+            "id" : "5b71835421e8731996512dc3",
+            "first_name" : "Hossam",
+            "last_name" : "Mahmoud"
+          },
+          {
+            "id" : "5b71856421e8731996512dc3",
+            "first_name" : "Mohamed",
+            "last_name" : "Mousa"
+          },
+          {
+            "id" : "5b71835891e8731996512dc3",
+            "first_name" : "Ali",
+            "last_name" : "Mando"
+          }
+          ]
