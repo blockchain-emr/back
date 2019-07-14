@@ -1,6 +1,7 @@
 import sys, json,threading, time
 sys.path.append("..")
 from common.config import *
+import datetime as dt
 from utils import general as gutils
 from utils.careblocks import CareBlocks
 
@@ -64,3 +65,25 @@ def register():
         print("Replying to client now ...")
 
     return jsonify(address=eth_address, status=201)
+
+
+@app.route('/account/temporary_token', methods=['GET'])
+@jwt_required
+@swag_from('../docs/swagger/accounts_management/temporary_token.yml')
+def get_temporary_token():
+    current_user = json.loads(get_jwt_identity())
+    address = current_user["address"]
+    user_type = current_user["acc_type"]
+    if user_type == "patient":
+        user_identity = {
+            "address" : address,
+            "acc_type" : "doctor"
+        }
+
+        user_identity = json.dumps(user_identity)
+        print(user_identity)
+        expiry = dt.timedelta(seconds=3600)
+        access_token  = create_access_token(identity=user_identity, expires_delta = token_expire)
+        return jsonify(temporary_token=access_token),200
+    else:
+        return jsonify(msg="Temporary access can only be created for users."), 401
