@@ -24,7 +24,8 @@ def auth():
         return jsonify(msg=password_validation["data"], status=401)
 
     user_identity = {
-        "address" : eth_address
+        "address" : eth_address,
+        "acc_type" : "patient"
     }
     user_identity = json.dumps(user_identity)
     print(user_identity)

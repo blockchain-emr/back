@@ -12,10 +12,10 @@ from common.config import *
 def get_balance():
     current_user = jloads(get_jwt_identity())
     address = current_user["address"]
+    user_type = current_user["acc_type"]
     print("Current user is : {}".format(address))
     balance = CareBlocks.get_balance(address)
     if balance is not None:
-        print(type(balance))
         return jsonify(balance=balance, current_user_address=address, status=200)
     else:
         return jsonify(msg="Invalid account address.", status=400)
@@ -28,7 +28,7 @@ def get_balance():
 def get_profile():
     current_user = jloads(get_jwt_identity())
     address = current_user['address']
-    
+
     # get patient CareBlock from chain
     careblock = CareBlocks.get_patient(address)
     print('Got their careblock boss:\n', careblock)
@@ -69,4 +69,3 @@ def edit_profile():
         return jsonify(status=201)
     else:
         return jsonify(msg="Edit failed", status=400)
-    
