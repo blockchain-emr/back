@@ -7,6 +7,7 @@ class Organization(db.Document):
     full_name    = db.StringField()
     username     = db.StringField(required=True, unique = True)
     email        = db.StringField(required=True, unique = True)
+    phone_number = db.StringField()
 
     def __str__(self):
         return "{}".format(self.full_name)
