@@ -3,8 +3,12 @@ Infra/ipfs-storage/*
 Infra/data/history
 Infra/data/geth/*
 *.pyc
-Infra/data/keystore/UTC--2019-07*
 Infra/mongodb
+.vscode/
+# untrack new created accounts when we run the Infra locally except the default one
+!Infra/data/keystore/UTC--2019-06-17T19-42-56.052750011Z--64c53df7a404b9d83a49cc8d02edb11f2300efee
+Infra/data/keystore/
+
 
 
 ######################################! Predifined paths/extensions for python !####################3

@@ -7,6 +7,7 @@ from passlib.hash import pbkdf2_sha512
 def store_user_data(patient_json, eth_address, password):
     print("Thread started ...")
     print("{}, {}, {}".format(patient_json, eth_address,password))
+
     CareBlocks.give_init_ether(eth_address)
     user_full_name = "{} {}".format(patient_json["first_name"],patient_json["last_name"])
     print("Creating ipfs and chain entries for user {} ..".format(user_full_name))

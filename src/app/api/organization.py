@@ -61,7 +61,7 @@ def orgauth():
 		else:
 			access_token = create_access_token(identity=json.loads(e.to_json()), expires_delta = token_expire)
 			refresh_token = create_refresh_token(identity=json.loads(e.to_json()), expires_delta = refresh_expire)
-			return jsonify(access_token=access_token,refresh_token=refresh_token)
+			return jsonify(access_token=access_token,refresh_token=refresh_token, status=200)
 
 
 

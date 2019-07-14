@@ -16,9 +16,9 @@ def get_balance():
     balance = CareBlocks.get_balance(address)
     if balance is not None:
         print(type(balance))
-        return jsonify({'balance': balance, "current_user_adress" : address}),200
+        return jsonify(balance=balance, current_user_address=address, status=200)
     else:
-        return jsonify({'result': "Invalid account address."}),400
+        return jsonify(msg="Invalid account address.", status=400)
 
 
 @app.route('/account/profile', methods=['GET'])
@@ -37,9 +37,9 @@ def get_profile():
     profile = IPFS.get_patient_profile(careblock['ipfs_hash'])
 
     if profile:
-        return jsonify(profile),200
+        return jsonify(profile), 200
     else:
-        return jsonify({'result': "Invalid account Address"}), 400
+        return jsonify(msg="Invalid account Address", status=400)
 
 
 @app.route('/account/profile', methods=['POST'])
@@ -49,7 +49,7 @@ def get_profile():
 def edit_profile():
 
     if not request.is_json:
-        return jsonify(msg="Unacceptable data format."), 406
+        return jsonify(msg="Unacceptable data format.", status=406)
 
     new_profile = request.json
     current_user = jloads(get_jwt_identity())
@@ -66,7 +66,7 @@ def edit_profile():
     update_success = CareBlocks.update_patient_ipfs(address, new_ipfs_hash)
 
     if update_success:
-        return jsonify(new_profile), 200
+        return jsonify(status=201)
     else:
-        return jsonify({'result': "Edit failed"}), 400
+        return jsonify(msg="Edit failed", status=400)
     

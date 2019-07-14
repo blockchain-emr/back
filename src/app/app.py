@@ -4,6 +4,8 @@ from common.config import *
 from api.account_details import *
 from api.authentication import *
 from api.organization import *
+from api.chronics import *
+from api.appointment import *
 
 
 
