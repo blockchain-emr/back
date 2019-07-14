@@ -1,7 +1,11 @@
 from time import sleep as tsleep
+import sys, json
 from utils.ipfs import IPFS
 from utils.careblocks import CareBlocks
 from passlib.hash import pbkdf2_sha512
+sys.path.append("..")
+from common.config import *
+from common.models import *
 
 
 def store_user_data(patient_json, eth_address, password):
@@ -29,3 +33,21 @@ def hash_SHA512(password):
 
 def verify_hash(password,user_hash):
     return pbkdf2_sha512.verify(password,user_hash)
+
+
+def get_doctors_list(organization = None):
+    doctors = []
+    if organization is not None:
+        org_obj = Organization.objects.get(id=organization)
+        doctors = json.loads(Doctor.objects.only("first_name","last_name","id").filter(organization=organization).to_json())
+        for doc in doctors:
+            print(doc)
+            doc['id'] = doc['_id']['$oid']
+            doc.pop("_id")
+    else:
+        doctors = json.loads(Doctor.objects.only("first_name","last_name","id").to_json())
+        for doc in doctors:
+            print(doc)
+            doc['id'] = doc['_id']['$oid']
+            doc.pop("_id")
+    return doctors
