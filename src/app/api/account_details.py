@@ -37,7 +37,7 @@ def get_profile():
     profile = IPFS.get_patient_profile(careblock['ipfs_hash'])
 
     if profile:
-        return jsonify(profile=profile, status=200)
+        return jsonify(profile), 200
     else:
         return jsonify(msg="Invalid account Address", status=400)
 
@@ -66,7 +66,7 @@ def edit_profile():
     update_success = CareBlocks.update_patient_ipfs(address, new_ipfs_hash)
 
     if update_success:
-        return jsonify(new_profile=new_profile, status=201)
+        return jsonify(status=201)
     else:
         return jsonify(msg="Edit failed", status=400)
     
