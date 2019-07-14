@@ -76,7 +76,10 @@ def orgauth():
 			print(entity)
 			access_token = create_access_token(identity=entity, expires_delta = token_expire)
 			refresh_token = create_refresh_token(identity=entity, expires_delta = refresh_expire)
-			return jsonify(access_token=access_token,refresh_token=refresh_token, status=200)
+			if auth_type == "doctor":
+				return jsonify(access_token=access_token,refresh_token=refresh_token, status=200)
+			else:
+				return jsonify(token=access_token,refresh_token=refresh_token, status=200)
 
 
 
@@ -105,13 +108,28 @@ def get_doctor_profile():
 		doctor_obj = {
 		"full_name" : doc.first_name + " " + doc.last_name,
 		"email" : doc.email,
-		"organiztion": doc.organization.full_name,
+		"organization": doc.organization.full_name,
 		"phone_number": doc.phone_number
 		}
 
 	else:
 		return jsonify(msg="Unauthorized."),401
 	return jsonify(doctor_obj),200
+
+
+@app.route('/organization/profile',methods=['GET'])
+@jwt_required
+@swag_from('../docs/swagger/organization/profile.yml')
+def get_org_profile():
+	current_user = json.loads(get_jwt_identity())
+	if current_user["acc_type"] == "organization":
+		org = Organization.objects.only("full_name","email","username","phone_number").get(id=current_user["id"])
+		org = json.loads(org.to_json())
+		org.pop("_id")
+
+	else:
+		return jsonify(msg="Unauthorized."),401
+	return jsonify(org),200
 
 
 @app.route('/organization/register',methods=['POST'])
@@ -137,3 +155,24 @@ def org_registeration():
 
 	log.info("Registeration Successed - Organization : " + str(org))
 	return jsonify(msg="Registered!"), 201
+
+
+@app.route('/organization/profile',methods=['POST'])
+@jwt_required
+@swag_from('../docs/swagger/organization/edit_profile.yml')
+def edit_org_profile():
+	if not request.is_json:
+		return jsonify(msg="Not Acceptable data format."), 406
+	print("requst json {} ".format(request.json))
+	current_user = json.loads(get_jwt_identity())
+	acc_type = current_user["acc_type"]
+	if acc_type == "organization":
+		org = Organization.objects.get(id = current_user["id"])
+		org.full_name = request.json.get("full_name",None)
+		org.email = request.json.get("email",None)
+		org.phone_number = request.json.get("phone_number",None)
+		org.username = request.json.get("username",None)
+		org.save()
+		return jsonify(msg="Edited!",status=201)
+	else:
+		return jsonify(msg="Only an organization is allowed to call this endpoint."), 401
