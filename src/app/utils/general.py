@@ -39,7 +39,7 @@ def get_doctors_list(organization = None):
     doctors = []
     if organization is not None:
         org_obj = Organization.objects.get(id=organization)
-        doctors = json.loads(Doctor.objects.only("first_name","last_name","id").filter(organization=organization).to_json())
+        doctors = json.loads(Doctor.objects.only("first_name","last_name","email","phone_number","id").filter(organization=organization).to_json())
         for doc in doctors:
             print(doc)
             doc['id'] = doc['_id']['$oid']
