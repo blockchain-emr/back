@@ -3,7 +3,24 @@
 content: application/json
 tags:
   - Doctor
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    required: true
+security:
+  - Bearer: []
+
 parameters:
+  - name: Authorization
+    in: header
+    schema:
+      type: string
+      format: token
+      required: true
+
   - name: body
     in: body
     required: true
@@ -36,12 +53,6 @@ parameters:
           content: application/json
           example: '01202198034'
           required: true
-        organization:
-          type: string
-          content: application/json
-          example: 5b71835421e8731996512dc3
-          format: uuid
-          required: false
 
 definitions:
   msg:
