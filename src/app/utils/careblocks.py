@@ -195,7 +195,11 @@ class CareBlocksUtility:
         patient = contract_instance.call().patients(patient_address)
 
         print("Here's the patient CareBlock :)")
-        patient_dict = {'ipfs_hash': patient[1], 'verified': patient[2]}
+        patient_dict = {
+            'ipfs_hash': patient[1],
+            'verified': patient[2],
+            'org': patient[3]
+        }
         print(patient_dict)
         return patient_dict
 
@@ -223,14 +227,15 @@ class CareBlocksUtility:
 
 
     # update patient emr verification status
-    def verify_patient_emr(self, patient_address, is_verified=True):
+    def verify_patient_emr(self, patient_address, org_id, is_verified=True):
         contract_instance = self.get_contract_instance(
             self.active_contract_name)
 
         # create transaction
         tx_hash = contract_instance.functions.verifyPatient(
             patient_address,
-            is_verified
+            is_verified,
+            org_id
         ).transact(
             {'from': patient_address}
         )
