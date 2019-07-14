@@ -3,6 +3,8 @@ Infra/ipfs-storage/*
 Infra/data/history
 Infra/data/geth/*
 *.pyc
+Infra/data/keystore/UTC--2019-07*
+Infra/mongodb
 
 
 ######################################! Predifined paths/extensions for python !####################3
