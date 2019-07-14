@@ -10,18 +10,18 @@ from utils.careblocks import CareBlocks
 @swag_from('../docs/swagger/accounts_management/auth.yml')
 def auth():
     if not request.is_json:
-        return jsonify(msg="Unacceptable data format."), 406
+        return jsonify(msg="Unacceptable data format.", status=406)
 
     eth_address = request.json.get('address', None)
     password = request.json.get('password', None)
     if not eth_address:
-        return jsonify(msg="Missing address parameter."), 400
+        return jsonify(msg="Missing address parameter.", status=400)
     if not password:
-        return jsonify(msg="Missing password parameter."), 400
+        return jsonify(msg="Missing password parameter.", status=400)
 
     password_validation = CareBlocks.validate_password(eth_address, password)
     if password_validation['result'] is False:
-        return jsonify(msg=password_validation["data"]), 401
+        return jsonify(msg=password_validation["data"], status=401)
 
     user_identity = {
         "address" : eth_address
@@ -36,14 +36,14 @@ def auth():
     # After this window, the access token will expire and the client needs to point them to relogin
     CareBlocks.w3.personal.unlockAccount(eth_address, password, 7200)
 
-    return jsonify(access_token=access_token,refresh_token=refresh_token), 200
+    return jsonify(access_token=access_token, refresh_token=refresh_token, status=200)
 
 
 @app.route('/register',methods=['POST'])
 @swag_from('../docs/swagger/accounts_management/register.yml')
 def register():
     if not request.is_json:
-        return jsonify(msg="Unacceptable data format."), 406
+        return jsonify(msg="Unacceptable data format.", status=406)
 
     patient_json = request.json
 
@@ -51,8 +51,9 @@ def register():
 
     # create account for patient on ethereum & give them some ether
     eth_address = CareBlocks.create_account(password)
+    print(type(eth_address))
     if not eth_address:
-        return jsonify(msg="Error happened, not created."), 500
+        return jsonify(msg="Error happened, not created.", status=500)
     else:
         # We don't need the password anymore
         del patient_json['password']
@@ -60,7 +61,5 @@ def register():
         thread.daemon = True
         thread.start()
         print("Replying to client now ...")
-    return jsonify({
-                    'address': eth_address,
-                    'status_code': 201
-                    })
+
+    return jsonify(address=eth_address, status=201)
