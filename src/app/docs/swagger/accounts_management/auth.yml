@@ -35,8 +35,8 @@ responses:
       $ref: '#/definitions/msg'
     examples:
       "" : {
-      'access_token': ' eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ',
-      'refresh_token': ' eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ'}
+      'access_token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ',
+      'refresh_token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ'}
   400 - 2:
     description: Error because no email found or no password found
     schema:
