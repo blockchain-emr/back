@@ -1,5 +1,6 @@
 #constants
 from flask import Flask, jsonify, abort, request
+from flask_mongoengine import MongoEngine
 from flask_cors import CORS
 import logging
 import os
@@ -19,8 +20,18 @@ global app, log,jwt, token_expire,refresh_expire,reset_expire
 app = Flask(__name__)
 icors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['JWT_SECRET_KEY'] = b'\x1bY!*?\xbb9\xb4\x98\xb0\xd6\r\xe7\x089\xdd\xc55\x80w\xd4\xc3\xce\xecM.\xc7\xd1(i' #os.urandom(50)
+app.config['MONGODB_SETTINGS'] = {
+    'db'  : 'careblocks',
+    'host': 'localhost',
+    'port': 27017
+#    'username' : 'careblocks',
+#    'password' : 'careblocks-Sup3r-Secur3-Paswsd'
+}
 swagger = Swagger(app)
 jwt = JWTManager(app)
+
+db = MongoEngine()
+db.init_app(app)
 
 # we will match this with the time we unlock the account
 # so after the token is expired the patient needs to login again so they can use the app
