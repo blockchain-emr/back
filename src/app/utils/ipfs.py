@@ -298,18 +298,23 @@ class IpfsEmr:
 
     def get_notifications(self, patient_hash):
         # retrieve all the notifications
-        all_notifications = []
+        all_nots = []
 
         patient_data = self.get_json_file(patient_hash)
         notification_hash = patient_data['notification']
         print(f"That is the notification hash: {notification_hash}")
         
+        data = {}
         if notification_hash:
             notification_data = self.get_json_file(notification_hash)
-            return notification_data
+    
+            for ts, msg in notification_data.items():
+                all_nots.append({'time_stamp': ts, 'msg': msg})
 
         else:
             print("there isn't any availabe notifications")
+
+        return all_nots
 
         
 
