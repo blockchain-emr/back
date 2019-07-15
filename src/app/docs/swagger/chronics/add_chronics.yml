@@ -27,8 +27,8 @@ parameters:
     content: application/json
     example: {
       'issue': 'high blood pleasure',
-      'food allergie': "fish",
-      'medication allergie': 'asprine',
+      'food_allergie': "fish",
+      'medication_allergie': 'asprine',
     }
       
 definitions:

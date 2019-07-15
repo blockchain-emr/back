@@ -37,13 +37,13 @@ responses:
     "response": [
       {
         'issue': 'high blood presure',
-        'medication allergie': 'asprine',
-        'food allergie': 'egg'
+        'medication_allergie': 'asprine',
+        'food_allergie': 'egg'
       },
       {
         'issue': 'low blood presure',
-        'medication allergie': 'panadol',
-        'food allergie': 'fish'
+        'medication_allergie': 'panadol',
+        'food_allergie': 'fish'
       }
     ]
     "status": 200
