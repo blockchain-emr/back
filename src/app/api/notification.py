@@ -21,4 +21,4 @@ def get_notifications():
         return jsonify(all_notifications), 200
         
     else:
-        return jsonify(msg="Can't retrieve notifications", status=400)
+        return jsonify("Can't retrieve notifications"), 400

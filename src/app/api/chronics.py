@@ -20,7 +20,7 @@ def get_chronics():
     if all_chronics:
         return jsonify(all_chronics), 200
     else:
-        return jsonify(msg="Can't retrieve them", status=400)
+        return jsonify("Can't retrieve them"), 400
 
 
 

@@ -62,7 +62,7 @@ def get_all_appointments():
     if all_appointments:
         return jsonify(appointments), 200
     else:
-        return jsonify(msg="Can't retrieve them", status=400)
+        return jsonify("Can't retrieve them"), 400
 
 
 

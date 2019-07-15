@@ -131,8 +131,6 @@ class IpfsEmr:
             print(chronics_list)
             return chronics_list
         
-        else:
-            return 'This patient does not have any chronics'
 
     
 
@@ -197,8 +195,6 @@ class IpfsEmr:
             print(all_appointments)
             return all_appointments
 
-        else:
-            print('The given patient doesn\'t have any previous appointments')
         
 
 
@@ -311,11 +307,7 @@ class IpfsEmr:
             for ts, msg in notification_data.items():
                 all_nots.append({'time_stamp': ts, 'msg': msg})
 
-        else:
-            print("there isn't any availabe notifications")
-
-        return all_nots
-
+            return all_nots
         
 
 
