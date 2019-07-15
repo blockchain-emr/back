@@ -18,7 +18,7 @@ def get_chronics():
     all_chronics = IPFS.retreive_chronics(care_blk['ipfs_hash'])
 
     if all_chronics:
-        return jsonify(chronics=all_chronics, status=200)
+        return jsonify(all_chronics), 200
     else:
         return jsonify(msg="Can't retrieve them", status=400)
 

@@ -111,14 +111,22 @@ class IpfsEmr:
 
     def retreive_chronics(self, patient_hash):
         patient_data = self.get_json_file(patient_hash)
-        chronics_hash = patient_data['chronic']
+        chronics_md = patient_data['chronic']
+        chronics_list = []
 
-        if chronics_hash:
-            chronics_data = self.get_json_file(chronics_hash)
+        if chronics_md:
+             #TODO loop over the meta data getting the time_stamp 
+             #TODO pushing the time_stamp to be a value in that object
 
-            if chronics_data:
-                return chronics_data
+            for ts, file_hash in chronics_md.items():
+                data = self.get_json_file(file_hash)
+                data['time_stamp'] = ts
                 
+                chronics_list.append(data)
+
+            print(chronics_list)
+            return chronics_list
+        
         else:
             return 'This patient does not have any chronics'
 
@@ -251,6 +259,13 @@ class IpfsEmr:
         else:
             print('There is not any lab_results data')
 
+
+
+    def add_notification(self):
+        pass
+
+    def get_notifications(self):
+        pass
 
 
     def add_attachments(self, img_data):

@@ -33,7 +33,8 @@ responses:
     description: An object that have all the user chronics icluding issues and allergies
     schema:
       $ref: '#/definitions/msg'
-    examples: {
+    examples: 
+    "response": [
       {
         'issue': 'high blood presure',
         'medication allergie': 'asprine',
@@ -44,9 +45,9 @@ responses:
         'medication allergie': 'panadol',
         'food allergie': 'fish'
       }
+    ]
+    "status": 200
 
-    }
-    
   400:
     description: Error because no such account found
     schema:
