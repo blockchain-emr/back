@@ -17,7 +17,8 @@ def get_notifications():
 
     all_notifications = IPFS.get_notifications(care_blk['ipfs_hash'])
 
-    if all_chronics:
+    if all_notifications:
         return jsonify(all_notifications), 200
+        
     else:
         return jsonify(msg="Can't retrieve notifications", status=400)

@@ -1,5 +1,8 @@
 import ipfshttpclient as ipfs
-import os, json, datetime, shutil
+import os, json, datetime, shutil, sys
+sys.path.append("..")
+from utils.careblocks import CareBlocks
+
 
 
 class IpfsEmr:
@@ -86,11 +89,6 @@ class IpfsEmr:
 
         new_patient_hash = self.push_json_file(patient_data)
         print(f'Successfully edited the patient profile')
-        notifay_msg = "Succesfully Edited Your profile data"
-
-
-        edit_patient_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
-        self.fire_notification(patient_hash, notifay_msg, ts)
 
         return new_patient_hash
 
@@ -110,8 +108,6 @@ class IpfsEmr:
         patient_data['chronic'] = chronic_md
 
         new_patient_hash = self.push_json_file(patient_data)
-        notifay_msg = "Succesfully added a new chronic data"
-        self.fire_notification(patient_hash, notifay_msg, chronic_ts)
 
         return new_patient_hash
     
@@ -155,8 +151,7 @@ class IpfsEmr:
         print(f'patient data after adding appointments {patient_data}')
 
         new_patient_hash = self.push_json_file(patient_data)
-        notifay_msg = "Succesfully added a new appointment data"
-        self.fire_notification(patient_hash, notifay_msg, appointement_ts)
+        
 
         return new_patient_hash
 
@@ -273,6 +268,7 @@ class IpfsEmr:
 
     def fire_notification(self, patient_hash, notification_msg, time_stamp):
         # adding records whenever a change happens to its data
+        print("IN Firing ...................")
         patient_data = self.get_json_file(patient_hash)
         notification_hash = patient_data['notification']
         notification_data = {}
@@ -286,13 +282,17 @@ class IpfsEmr:
             notification_new_hash = self.push_json_file(notification_data)
 
         else:
+            print("IN else in Firing ...................")
             # creating fire notification file and push it to ipfs
             notification_data[time_stamp] = notification_msg
-            noitifcation_hash = self.push_json_file(notification_data)
+            notification_new_hash = self.push_json_file(notification_data)
             print('adding notification file for the first time')
 
 
         patient_data['notification'] = notification_new_hash
+        new_patient_hash = self.push_json_file(patient_data)
+
+        return new_patient_hash
 
 
 
@@ -302,6 +302,7 @@ class IpfsEmr:
 
         patient_data = self.get_json_file(patient_hash)
         notification_hash = patient_data['notification']
+        print(f"That is the notification hash: {notification_hash}")
         
         if notification_hash:
             notification_data = self.get_json_file(notification_hash)
