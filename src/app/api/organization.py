@@ -149,6 +149,7 @@ def org_registeration():
 	org = Organization(username=username)
 	org.password = gutils.hash_SHA512(pwd)
 	org.full_name = request.json.get("full_name",None)
+	org.phone_number = request.json.get("phone_number",None)
 	org.email = request.json.get("email",None)
 	org.save()
 
