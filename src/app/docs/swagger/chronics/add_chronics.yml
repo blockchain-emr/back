@@ -26,11 +26,16 @@ parameters:
     required: true
     content: application/json
     example: {
-      'allergies': {
-          'food allergies': ['egg', 'meat', 'water'],
-          'medications allergies': ['asprine', 'profine'],
+      {
+        'issue': 'high blood presure',
+        'medication allergie': 'asprine',
+        'food allergie': 'egg'
       },
-      'issues': ['high blood pressure', 'diabates'],
+      {
+        'issue': 'low blood presure',
+        'medication allergie': 'panadol',
+        'food allergie': 'fish'
+      }
     } 
       
       

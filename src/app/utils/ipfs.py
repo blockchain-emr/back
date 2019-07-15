@@ -57,7 +57,7 @@ class IpfsEmr:
         patient_data = {
             'profile_data': patient_profile_data,
             'appointments': {},
-            'chronic': '',
+            'chronic': {},
             'lab_results': ''
         }
 
@@ -91,13 +91,18 @@ class IpfsEmr:
 
 
     def add_chronics(self, patient_hash, chronic_data):
-        # add json file then update the field in the patient_data file
+        # HINT designing chronics to look the same as appointments
         chronic_hash = self.push_json_file(chronic_data)
         patient_data = self.get_json_file(patient_hash)
+        chronic_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+
+        # chronic meta data
+        chronic_md = patient_data['chronic']
+        chronic_md[chronic_ts] = chronic_hash
 
         # adding the chronic file hash into the patient data file
-        patient_data['chronic'] = chronic_hash
-        print(patient_data)
+        patient_data['chronic'] = chronic_md
+
         new_patient_hash = self.push_json_file(patient_data)
 
         return new_patient_hash
