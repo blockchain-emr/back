@@ -58,7 +58,8 @@ class IpfsEmr:
             'profile_data': patient_profile_data,
             'appointments': {},
             'chronic': {},
-            'lab_results': ''
+            'lab_results': '',
+            'notification': ''
         }
 
         patient_hash = self.push_json_file(patient_data)
@@ -86,8 +87,10 @@ class IpfsEmr:
         new_patient_hash = self.push_json_file(patient_data)
         print(f'Successfully edited the patient profile')
         notifay_msg = "Succesfully Edited Your profile data"
-        self.fire_notification(appointement_ts, notifay_msg)
 
+
+        edit_patient_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+        self.fire_notification(patient_hash, notifay_msg, ts)
 
         return new_patient_hash
 
@@ -108,7 +111,7 @@ class IpfsEmr:
 
         new_patient_hash = self.push_json_file(patient_data)
         notifay_msg = "Succesfully added a new chronic data"
-        self.fire_notification(appointement_ts, notifay_msg)
+        self.fire_notification(patient_hash, notifay_msg, chronic_ts)
 
         return new_patient_hash
     
@@ -153,7 +156,7 @@ class IpfsEmr:
 
         new_patient_hash = self.push_json_file(patient_data)
         notifay_msg = "Succesfully added a new appointment data"
-        self.fire_notification(appointement_ts, notifay_msg)
+        self.fire_notification(patient_hash, notifay_msg, appointement_ts)
 
         return new_patient_hash
 
@@ -268,15 +271,46 @@ class IpfsEmr:
 
 
 
-    def fire_notification(self):
+    def fire_notification(self, patient_hash, notification_msg, time_stamp):
         # adding records whenever a change happens to its data
-        pass
+        patient_data = self.get_json_file(patient_hash)
+        notification_hash = patient_data['notification']
+        notification_data = {}
+
+        # notifay_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+        notification_new_hash = ''
+        if notification_hash:
+            # Get the data then add to it then readd it to patient data
+            notification_data = self.get_json_file(notification_hash)
+            notification_data[time_stamp] = notification_msg
+            notification_new_hash = self.push_json_file(notification_data)
+
+        else:
+            # creating fire notification file and push it to ipfs
+            notification_data[time_stamp] = notification_msg
+            noitifcation_hash = self.push_json_file(notification_data)
+            print('adding notification file for the first time')
+
+
+        patient_data['notification'] = notification_new_hash
 
 
 
-    def get_notifications(self):
+    def get_notifications(self, patient_hash):
         # retrieve all the notifications
-        pass
+        all_notifications = []
+
+        patient_data = self.get_json_file(patient_hash)
+        notification_hash = patient_data['notification']
+        
+        if notification_hash:
+            notification_data = self.get_json_file(notification_hash)
+            return notification_data
+
+        else:
+            print("there isn't any availabe notifications")
+
+        
 
 
     def add_attachments(self, img_data):
