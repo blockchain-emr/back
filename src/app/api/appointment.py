@@ -1,4 +1,4 @@
-import sys, json, time
+import sys, json, time, datetime
 sys.path.append("..")
 from utils.careblocks import CareBlocks
 from utils.ipfs import IPFS
@@ -26,8 +26,13 @@ def add_appointment():
     # adding the appointment to IPFS
     new_ipfs_hash = IPFS.add_appointement(care_blk['ipfs_hash'], new_appointment)
 
+    # Firing notification
+    notifay_msg = "Succesfully added a new appointment data"
+    time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    hash_after_firing = IPFS.fire_notification(new_ipfs_hash, notifay_msg, time_stamp)
+
     # update patient ipfs hash on chain
-    update_success = CareBlocks.update_patient_ipfs(address, new_ipfs_hash)
+    update_success = CareBlocks.update_patient_ipfs(address, hash_after_firing)
 
     if update_success:
         return jsonify(msg='Added succesfully', status=201)
