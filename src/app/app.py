@@ -6,6 +6,7 @@ from api.authentication import *
 from api.organization import *
 from api.chronics import *
 from api.appointment import *
+from api.notification import *
 
 
 
