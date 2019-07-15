@@ -1,4 +1,4 @@
-import sys
+import sys, datetime
 from json import loads as jloads
 sys.path.append("..")
 from utils.careblocks import CareBlocks
@@ -62,8 +62,14 @@ def edit_profile():
     # update their profile on IPFS
     new_ipfs_hash = IPFS.edit_patient_profile(careblock['ipfs_hash'], new_profile)
 
+
+    # Firing notification
+    notifay_msg = "Succesfully Editing Your profile data"
+    time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    hash_after_firing = IPFS.fire_notification(new_ipfs_hash, notifay_msg, time_stamp)
+
     # update patient ipfs hash on chain
-    update_success = CareBlocks.update_patient_ipfs(address, new_ipfs_hash)
+    update_success = CareBlocks.update_patient_ipfs(address, hash_after_firing)
 
     if update_success:
         return jsonify(status=201)
