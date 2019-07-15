@@ -85,6 +85,9 @@ class IpfsEmr:
 
         new_patient_hash = self.push_json_file(patient_data)
         print(f'Successfully edited the patient profile')
+        notifay_msg = "Succesfully Edited Your profile data"
+        self.fire_notification(appointement_ts, notifay_msg)
+
 
         return new_patient_hash
 
@@ -104,6 +107,8 @@ class IpfsEmr:
         patient_data['chronic'] = chronic_md
 
         new_patient_hash = self.push_json_file(patient_data)
+        notifay_msg = "Succesfully added a new chronic data"
+        self.fire_notification(appointement_ts, notifay_msg)
 
         return new_patient_hash
     
@@ -147,6 +152,8 @@ class IpfsEmr:
         print(f'patient data after adding appointments {patient_data}')
 
         new_patient_hash = self.push_json_file(patient_data)
+        notifay_msg = "Succesfully added a new appointment data"
+        self.fire_notification(appointement_ts, notifay_msg)
 
         return new_patient_hash
 
@@ -261,10 +268,14 @@ class IpfsEmr:
 
 
 
-    def add_notification(self):
+    def fire_notification(self):
+        # adding records whenever a change happens to its data
         pass
 
+
+
     def get_notifications(self):
+        # retrieve all the notifications
         pass
 
 
