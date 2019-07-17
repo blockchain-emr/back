@@ -21,20 +21,16 @@ parameters:
       format: token
       required: true
 
-  - name: body
-    in: body
+  - in: body
+    name: body  
     required: true
     content: application/json
     example: {
-      'allergies': {
-          'food allergies': ['egg', 'meat', 'water'],
-          'medications allergies': ['asprine', 'profine'],
-      },
-      'issues': ['high blood pressure', 'diabates'],
-    } 
+      'issue': 'high blood pleasure',
+      'food_allergie': "fish",
+      'medication_allergie': 'asprine',
+    }
       
-      
-
 definitions:
   msg:
     type: object

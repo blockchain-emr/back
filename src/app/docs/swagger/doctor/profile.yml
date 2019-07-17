@@ -1,9 +1,7 @@
-   Get All the chronics data for an autharized user.
+  Endpoint get doctor profile info.
 ---
-content: application/json
 tags:
-  - Chronics
-
+  - Doctor
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -30,24 +28,16 @@ definitions:
 
 responses:
   200:
-    description: An object that have all the user chronics icluding issues and allergies
+    description: An object that has doctor profile data
     schema:
       $ref: '#/definitions/msg'
-    examples: 
-    "response": [
-      {
-        'issue': 'high blood presure',
-        'medication_allergie': 'asprine',
-        'food_allergie': 'egg'
-      },
-      {
-        'issue': 'low blood presure',
-        'medication_allergie': 'panadol',
-        'food_allergie': 'fish'
-      }
-    ]
-    "status": 200
-
+    examples:
+      "" : {
+            "full_name" : "Hossam Mahmoud",
+            "phone_number":"01202198034",
+            "email":"hossam.mahmoud@mail.com",
+            "organization" : "The red helal"
+          }
   400:
     description: Error because no such account found
     schema:
@@ -55,4 +45,4 @@ responses:
     examples:
       case 1: {
         "msg": "Invalid account address."
-      }
+        }

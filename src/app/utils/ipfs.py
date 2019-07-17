@@ -1,5 +1,8 @@
 import ipfshttpclient as ipfs
-import os, json, datetime, shutil
+import os, json, datetime, shutil, sys
+sys.path.append("..")
+from utils.careblocks import CareBlocks
+
 
 
 class IpfsEmr:
@@ -57,8 +60,9 @@ class IpfsEmr:
         patient_data = {
             'profile_data': patient_profile_data,
             'appointments': {},
-            'chronic': '',
-            'lab_results': ''
+            'chronic': {},
+            'lab_results': '',
+            'notification': ''
         }
 
         patient_hash = self.push_json_file(patient_data)
@@ -91,13 +95,18 @@ class IpfsEmr:
 
 
     def add_chronics(self, patient_hash, chronic_data):
-        # add json file then update the field in the patient_data file
+        # HINT designing chronics to look the same as appointments
         chronic_hash = self.push_json_file(chronic_data)
         patient_data = self.get_json_file(patient_hash)
+        chronic_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+
+        # chronic meta data
+        chronic_md = patient_data['chronic']
+        chronic_md[chronic_ts] = chronic_hash
 
         # adding the chronic file hash into the patient data file
-        patient_data['chronic'] = chronic_hash
-        print(patient_data)
+        patient_data['chronic'] = chronic_md
+
         new_patient_hash = self.push_json_file(patient_data)
 
         return new_patient_hash
@@ -106,16 +115,22 @@ class IpfsEmr:
 
     def retreive_chronics(self, patient_hash):
         patient_data = self.get_json_file(patient_hash)
-        chronics_hash = patient_data['chronic']
+        chronics_md = patient_data['chronic']
+        chronics_list = []
 
-        if chronics_hash:
-            chronics_data = self.get_json_file(chronics_hash)
+        if chronics_md:
+             #TODO loop over the meta data getting the time_stamp 
+             #TODO pushing the time_stamp to be a value in that object
 
-            if chronics_data:
-                return chronics_data
+            for ts, file_hash in chronics_md.items():
+                data = self.get_json_file(file_hash)
+                data['time_stamp'] = ts
                 
-        else:
-            return 'This patient does not have any chronics'
+                chronics_list.append(data)
+
+            print(chronics_list)
+            return chronics_list
+        
 
     
 
@@ -134,6 +149,7 @@ class IpfsEmr:
         print(f'patient data after adding appointments {patient_data}')
 
         new_patient_hash = self.push_json_file(patient_data)
+        
 
         return new_patient_hash
 
@@ -179,8 +195,6 @@ class IpfsEmr:
             print(all_appointments)
             return all_appointments
 
-        else:
-            print('The given patient doesn\'t have any previous appointments')
         
 
 
@@ -246,6 +260,55 @@ class IpfsEmr:
         else:
             print('There is not any lab_results data')
 
+
+
+    def fire_notification(self, patient_hash, notification_msg, time_stamp):
+        # adding records whenever a change happens to its data
+        print("IN Firing ...................")
+        patient_data = self.get_json_file(patient_hash)
+        notification_hash = patient_data['notification']
+        notification_data = {}
+
+        # notifay_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+        notification_new_hash = ''
+        if notification_hash:
+            # Get the data then add to it then readd it to patient data
+            notification_data = self.get_json_file(notification_hash)
+            notification_data[time_stamp] = notification_msg
+            notification_new_hash = self.push_json_file(notification_data)
+
+        else:
+            print("IN else in Firing ...................")
+            # creating fire notification file and push it to ipfs
+            notification_data[time_stamp] = notification_msg
+            notification_new_hash = self.push_json_file(notification_data)
+            print('adding notification file for the first time')
+
+
+        patient_data['notification'] = notification_new_hash
+        new_patient_hash = self.push_json_file(patient_data)
+
+        return new_patient_hash
+
+
+
+    def get_notifications(self, patient_hash):
+        # retrieve all the notifications
+        all_nots = []
+
+        patient_data = self.get_json_file(patient_hash)
+        notification_hash = patient_data['notification']
+        print(f"That is the notification hash: {notification_hash}")
+        
+        data = {}
+        if notification_hash:
+            notification_data = self.get_json_file(notification_hash)
+    
+            for ts, msg in notification_data.items():
+                all_nots.append({'time_stamp': ts, 'msg': msg})
+
+            return all_nots
+        
 
 
     def add_attachments(self, img_data):

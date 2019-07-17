@@ -1,9 +1,8 @@
-  Registeration endpoint to create a new Doctor account.
+   Edit organization profile, Authentication required.
 ---
 content: application/json
 tags:
-  - Doctor
-
+  - Organization
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -14,44 +13,37 @@ security:
   - Bearer: []
 
 parameters:
-  - name: Authorization
-    in: header
+  - in: header
+    name: Authorization
     schema:
       type: string
       format: token
       required: true
-
   - name: body
     in: body
     required: true
     schema:
       type: object
       properties:
-        first_name:
+        full_name:
           type: string
           content: application/json
-          example: 'John'
-          required: true
-        last_name:
-          type: string
-          content: application/json
-          example: 'Doe'
-          required: true
-        email:
-          type: string
-          content: application/json
-          example: 'my_email@mail.com'
-          required: true
-        password:
-          type: string
-          content: application/json
-          example: 'very_strong_password'
-          format: password
+          example: 'hospital name'
           required: true
         phone_number:
           type: string
           content: application/json
           example: '01202198034'
+          required: true
+        email:
+          type: string
+          content: application/json
+          example: 'hospital@mail.com'
+          required: true
+        username:
+          type: string
+          content: application/json
+          example: 'hospitalone'
           required: true
 
 definitions:
@@ -62,27 +54,19 @@ definitions:
         type: string
 
 responses:
-  201:
-    description: The Hexadecimal address of the created account.
+  200:
+    description: An object that has organization new profile data
     schema:
       $ref: '#/definitions/msg'
     examples:
       "" : {
-      'address': '0x64c53df7a404b9d83a49cc8d02edb11f2300efee'}
-  500:
-    description: General error if account creation failed.
+        'full_name': 'Hospital 57357', 'email': 'my_email@mail.com', 'username': 'username', 'last_name': 'Doe', 'national_id': '2971112233', 'phone_number': '012010101010'
+      }
+  400:
+    description: Error because no such account found
     schema:
       $ref: '#/definitions/msg'
     examples:
-      "": {
-        "msg": "Error happened, not created."
-        }
-
-  406:
-    description: Error because this endpoint accepts json data only
-    schema:
-      $ref: '#/definitions/msg'
-    examples:
-      "": {
-        "msg": "Unacceptable data format."
+      case 1: {
+        "msg": "Invalid account address."
         }

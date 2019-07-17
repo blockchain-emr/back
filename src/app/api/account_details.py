@@ -1,4 +1,4 @@
-import sys
+import sys, datetime
 from json import loads as jloads
 sys.path.append("..")
 from utils.careblocks import CareBlocks
@@ -12,10 +12,10 @@ from common.config import *
 def get_balance():
     current_user = jloads(get_jwt_identity())
     address = current_user["address"]
+    user_type = current_user["acc_type"]
     print("Current user is : {}".format(address))
     balance = CareBlocks.get_balance(address)
     if balance is not None:
-        print(type(balance))
         return jsonify(balance=balance, current_user_address=address, status=200)
     else:
         return jsonify(msg="Invalid account address.", status=400)
@@ -28,7 +28,7 @@ def get_balance():
 def get_profile():
     current_user = jloads(get_jwt_identity())
     address = current_user['address']
-    
+
     # get patient CareBlock from chain
     careblock = CareBlocks.get_patient(address)
     print('Got their careblock boss:\n', careblock)
@@ -62,11 +62,16 @@ def edit_profile():
     # update their profile on IPFS
     new_ipfs_hash = IPFS.edit_patient_profile(careblock['ipfs_hash'], new_profile)
 
+
+    # Firing notification
+    notifay_msg = "Succesfully Editing Your profile data"
+    time_stamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    hash_after_firing = IPFS.fire_notification(new_ipfs_hash, notifay_msg, time_stamp)
+
     # update patient ipfs hash on chain
-    update_success = CareBlocks.update_patient_ipfs(address, new_ipfs_hash)
+    update_success = CareBlocks.update_patient_ipfs(address, hash_after_firing)
 
     if update_success:
         return jsonify(status=201)
     else:
         return jsonify(msg="Edit failed", status=400)
-    

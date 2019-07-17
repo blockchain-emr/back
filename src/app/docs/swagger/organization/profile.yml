@@ -1,9 +1,7 @@
-   Get All the chronics data for an autharized user.
+  Endpoint get Organization's own profile info.
 ---
-content: application/json
 tags:
-  - Chronics
-
+  - Organization
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -30,24 +28,16 @@ definitions:
 
 responses:
   200:
-    description: An object that have all the user chronics icluding issues and allergies
+    description: An object that has organization profile data
     schema:
       $ref: '#/definitions/msg'
-    examples: 
-    "response": [
-      {
-        'issue': 'high blood presure',
-        'medication_allergie': 'asprine',
-        'food_allergie': 'egg'
-      },
-      {
-        'issue': 'low blood presure',
-        'medication_allergie': 'panadol',
-        'food_allergie': 'fish'
-      }
-    ]
-    "status": 200
-
+    examples:
+      "" : {
+            "full_name" : "My mostashfa",
+            "phone_number":"01202198034",
+            "email":"my.hospital@mail.com",
+            "username" : "mostame"
+          }
   400:
     description: Error because no such account found
     schema:
@@ -55,4 +45,4 @@ responses:
     examples:
       case 1: {
         "msg": "Invalid account address."
-      }
+        }

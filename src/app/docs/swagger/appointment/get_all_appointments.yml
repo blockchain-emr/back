@@ -34,20 +34,28 @@ responses:
     schema:
       $ref: '#/definitions/msg'
     examples:
-      "" : {
-      'timestamp': {
-        'diagnoses': 'flue',
-        'diet': "don't eat fish",
-        'medications': ['asprine', 'panadol'],
-        'hints': "null"
-      },
-      'timestamp': {
-        'diagnoses': 'fiver',
-        'diet': "eat lots of fruits and wra2 3inab",
-        'medications': ['asprine', 'panadol'],
-        'hints': "null"
-      },
-    }
+      "" : [
+  {
+    "diagnoses": "flu",
+    "diet": "don't eat fish",
+    "hints": "null",
+    "medications": [
+      "asprine",
+      "panadol"
+    ],
+    "timestamp": "20190714175947975959"
+  },
+  {
+    "diagnoses": "7asba",
+    "diet": "east vegetables",
+    "hints": "stay away from people",
+    "medications": [
+      "anti-biotic",
+      "brofen"
+    ],
+    "timestamp": "20190714180303241733"
+  }
+]
   400:
     description: Error because no such account found
     schema:

@@ -1,8 +1,8 @@
-   Get All the chronics data for an autharized user.
+   Get All Notifications for an autharized user patinet.
 ---
 content: application/json
 tags:
-  - Chronics
+  - Notifications
 
 securityDefinitions:
   Bearer:
@@ -34,17 +34,9 @@ responses:
     schema:
       $ref: '#/definitions/msg'
     examples: 
-    "response": [
-      {
-        'issue': 'high blood presure',
-        'medication_allergie': 'asprine',
-        'food_allergie': 'egg'
-      },
-      {
-        'issue': 'low blood presure',
-        'medication_allergie': 'panadol',
-        'food_allergie': 'fish'
-      }
+    "": [
+      {'timestamp': 'msg_1'},
+      {'timestamp': 'msg_2'}
     ]
     "status": 200
 

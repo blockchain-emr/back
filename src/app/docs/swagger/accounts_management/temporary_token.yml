@@ -1,9 +1,8 @@
-   Get All the chronics data for an autharized user.
+  Get temporary token to access user's data.
 ---
 content: application/json
 tags:
-  - Chronics
-
+  - Authentication
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -30,24 +29,13 @@ definitions:
 
 responses:
   200:
-    description: An object that have all the user chronics icluding issues and allergies
+    description: A temporary 1 hour acess token to access user's data
     schema:
       $ref: '#/definitions/msg'
-    examples: 
-    "response": [
-      {
-        'issue': 'high blood presure',
-        'medication_allergie': 'asprine',
-        'food_allergie': 'egg'
-      },
-      {
-        'issue': 'low blood presure',
-        'medication_allergie': 'panadol',
-        'food_allergie': 'fish'
+    examples:
+      "" : {
+        "temporary_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzI2MDA2MTcsIm5iZiI6MTUzMjYwMDYxNywianRpIjoiODEwOGE1MzYtNTcxZS00YjVlLWFiOTAtZTQwOTgwY2U5NGZjIiwiZXhwIjoxNTMyNjAxNTE3LCJpZGVudGl0eSI6Imhvc3NhbS5hYm9lbGl3b0Byb290Z2F0ZS5jb20iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.BYVKGgmT4dtJee-XmBM6vdTDpUHprRKTSK3cBuNDggQ"
       }
-    ]
-    "status": 200
-
   400:
     description: Error because no such account found
     schema:
@@ -55,4 +43,4 @@ responses:
     examples:
       case 1: {
         "msg": "Invalid account address."
-      }
+        }
