@@ -50,7 +50,7 @@ Pygments==2.4.2
 PyJWT==1.7.1
 pymongo==3.8.0
 pyrsistent==0.15.2
-PyYAML==5.1.1
+PyYAML==5.4
 requests==2.22.0
 rlp==1.1.0
 semantic-version==2.6.0
