@@ -47,7 +47,7 @@ ptyprocess==0.6.0
 py-solc==3.2.0
 pycryptodome==3.8.2
 Pygments==2.4.2
-PyJWT==1.7.1
+PyJWT==2.4.0
 pymongo==3.8.0
 pyrsistent==0.15.2
 PyYAML==5.1.1
